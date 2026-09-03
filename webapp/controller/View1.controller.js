@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Controller, MessageToast) {
     "use strict";
 
-    return Controller.extend("com.demo.b72ui5app.controller.View1", {
+    return Controller.extend("com.demo.b72ui5app.controller.View1", {   
 
         onInit: function () {
             // API call or model initialization
@@ -19,7 +19,6 @@ sap.ui.define([
             var oContext = oItem.getBindingContext();
 
             var oProduct = oContext.getObject();
-
             MessageToast.show("Product: " + oProduct.title);
         }
 

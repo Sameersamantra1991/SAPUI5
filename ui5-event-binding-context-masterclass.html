@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masterclass: SAPUI5 Events, Controls, Binding Context & Model Data</title>
+<style>
+:root{--bg:#0b1220;--bg2:#0f172a;--panel:#111c33;--panel2:#16233f;--border:#24365a;--text:#e2e8f0;--muted:#94a3b8;--accent:#38bdf8;--accent2:#a78bfa;--green:#22c55e;--yellow:#facc15;--red:#f87171;--orange:#fb923c;--codebg:#020617}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Inter,system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+a{color:var(--accent)}
+header{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(11,18,32,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 16px;z-index:50}
+header .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:900;color:white}
+header h1{font-size:16px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .sub{font-size:12px;color:var(--muted)}
+#menuBtn{display:none;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;cursor:pointer}
+.layout{display:flex;margin-top:62px}
+nav#sidebar{width:295px;min-width:295px;position:sticky;top:62px;height:calc(100vh - 62px);overflow:auto;background:var(--bg2);border-right:1px solid var(--border);padding:16px 12px}
+nav#sidebar input{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--codebg);color:var(--text)}
+nav#sidebar a{display:block;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:13.5px;margin:2px 0}
+nav#sidebar a:hover,nav#sidebar a.active{background:var(--panel2);color:white}
+nav#sidebar .grp{font-size:11px;letter-spacing:.1em;color:#64748b;margin:14px 6px 6px;text-transform:uppercase;font-weight:700}
+main{flex:1;min-width:0;padding:28px;max-width:1150px;margin:0 auto}
+section{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:26px;margin:0 0 26px}
+section h2{margin-top:0;font-size:26px;border-bottom:1px solid var(--border);padding-bottom:12px}
+section h3{color:var(--accent);margin-top:28px}
+.badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:20px;background:#1e293b;border:1px solid var(--border);color:var(--muted);margin:2px 4px 2px 0}
+.badge.b-green{background:rgba(34,197,94,.15);color:#86efac;border-color:rgba(34,197,94,.4)}
+.badge.b-blue{background:rgba(56,189,248,.15);color:#7dd3fc;border-color:rgba(56,189,248,.4)}
+.badge.b-purple{background:rgba(167,139,250,.15);color:#c4b5fd;border-color:rgba(167,139,250,.4)}
+.badge.b-yellow{background:rgba(250,204,21,.14);color:#fde047;border-color:rgba(250,204,21,.4)}
+.badge.b-red{background:rgba(248,113,113,.14);color:#fca5a5;border-color:rgba(248,113,113,.4)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}nav#sidebar{position:fixed;left:0;top:62px;z-index:60;transform:translateX(-105%);transition:.25s}nav#sidebar.open{transform:none}#menuBtn{display:block}main{padding:16px}}
+.card{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.card h4{margin:0 0 8px}
+.note{border-left:4px solid var(--accent);background:rgba(56,189,248,.08);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0}
+.warn{border-left:4px solid var(--orange);background:rgba(251,146,60,.1);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0}
+.danger{border-left:4px solid var(--red);background:rgba(248,113,113,.1);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0}
+.ok{border-left:4px solid var(--green);background:rgba(34,197,94,.1);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0}
+pre{background:var(--codebg);border:1px solid var(--border);border-radius:12px;padding:16px 16px 16px;overflow:auto;position:relative;font-family:Consolas,Menlo,monospace;font-size:13.5px;line-height:1.6}
+code{font-family:Consolas,Menlo,monospace}
+.copyBtn{position:absolute;top:8px;right:8px;background:#1e293b;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer}
+.copyBtn:hover{background:#334155}
+.tg{color:#7dd3fc}.at{color:#c4b5fd}.st{color:#86efac}.cm{color:#64748b;font-style:italic}.kw{color:#f0abfc}.fn{color:#fde047}.num{color:#fb923c}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:10px;text-align:left;vertical-align:top}
+th{background:#1e293b}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;margin:18px 0}
+.fstep{background:var(--panel2);border:2px solid var(--border);border-radius:12px;padding:12px 18px;min-width:260px;max-width:520px;text-align:center;cursor:pointer;transition:.2s;width:100%}
+.fstep:hover{border-color:var(--accent)}
+.fstep.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.25);background:#0c2540}
+.fstep small{color:var(--muted);display:block}
+.arrow{font-size:22px;color:var(--accent);line-height:1.2}
+#fstepInfo,.infoBox{background:#020617;border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:12px}
+details{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:700;color:var(--accent)}
+button.btn{background:linear-gradient(135deg,#0ea5e9,#6366f1);border:none;color:white;padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:700}
+button.btn.ghost{background:#1e293b;border:1px solid var(--border)}
+button.btn:hover{opacity:.9}
+.mockTable{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:14px 0}
+.mockTable .mrow{display:grid;grid-template-columns:50px 1fr 90px 120px 220px;gap:0;background:#0f172a}
+.mockTable .mrow.head{background:#1e293b;font-weight:800;font-size:13px}
+.mockTable .mrow>div{padding:10px;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mockTable .mrow:not(.head):hover{background:#132040}
+.miniBtn{background:#1e293b;border:1px solid var(--border);color:var(--text);border-radius:7px;padding:4px 9px;font-size:12px;cursor:pointer}
+.miniBtn.view{border-color:#38bdf8;color:#7dd3fc}.miniBtn.edit{border-color:#facc15;color:#fde047}.miniBtn.del{border-color:#f87171;color:#fca5a5}
+#debuggerSim{display:grid;grid-template-columns:220px 1fr;gap:14px}
+@media(max-width:800px){#debuggerSim{grid-template-columns:1fr}.mockTable .mrow{grid-template-columns:1fr 1fr}}
+.dbgVar{background:var(--codebg);border:1px solid var(--border);border-radius:10px;padding:10px;margin:8px 0;cursor:pointer;font-size:13px}
+.dbgVar.active{border-color:var(--green)}
+.quiz{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:16px;margin:12px 0}
+.quiz button{display:block;width:100%;text-align:left;margin:6px 0;background:#0f172a;border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;cursor:pointer}
+.quiz button:hover{border-color:var(--accent)}
+.quiz .ans{display:none;margin-top:10px}
+.treeQ{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:18px;margin:12px 0}
+.treeQ .opts{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.kbd{background:#020617;border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;padding:1px 7px;font-family:monospace;font-size:12.5px}
+.hero{background:radial-gradient(800px 300px at 20% 0%,rgba(56,189,248,.2),transparent),radial-gradient(700px 300px at 90% 10%,rgba(167,139,250,.22),transparent),var(--panel);border:1px solid var(--border);border-radius:18px;padding:30px}
+.printArea{border:2px dashed var(--accent);border-radius:14px;padding:20px;background:#020617}
+@media print{header,nav#sidebar,#menuBtn,.copyBtn,.noPrint{display:none!important}.layout{margin:0}main{max-width:100%}section{break-inside:avoid}}
+.levels{display:flex;gap:8px;flex-wrap:wrap}
+.lvl{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;min-width:150px}
+</style>
+</head>
+<body>
+<header>
+<button id="menuBtn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ Menu</button>
+<div class="logo">UI5</div>
+<div><h1>Masterclass: SAPUI5 Events, Controls, Binding Context &amp; Model Data</h1><div class="sub">oEvent • getSource • getBindingContext • getObject • Models • Tables • Dialogs • CRUD</div></div>
+</header>
+<div class="layout">
+<nav id="sidebar">
+<input id="navSearch" placeholder="🔍 Filter topics..." oninput="filterNav(this.value)">
+<div id="navLinks">
+<div class="grp">Start</div>
+<a href="#s-big">1. Big Picture: What happens on click?</a>
+<a href="#s-oevent">2. What is oEvent?</a>
+<a href="#s-source">3. getSource()</a>
+<a href="#s-parent">4. getParent()</a>
+<div class="grp">Data</div>
+<a href="#s-binding">5. Binding Basics</a>
+<a href="#s-tablexml">6. Table Example (XML)</a>
+<a href="#s-dataflow">7. Table Data Flow + Contexts</a>
+<a href="#s-context">8. getBindingContext()</a>
+<a href="#s-object">9. getObject()</a>
+<a href="#s-property">10. getProperty()</a>
+<a href="#s-path">11. getPath()</a>
+<a href="#s-model">12. getModel()</a>
+<a href="#s-byid">13. this.byId()</a>
+<div class="grp">Events</div>
+<a href="#s-params">14. getParameter() – Input/CheckBox/List/Combo</a>
+<a href="#s-compare">15. Big Comparison Cheat Sheet</a>
+<a href="#s-main">16. Main Scenario: View Button</a>
+<a href="#s-alt">17. Alternative: getParent() approach</a>
+<a href="#s-inputrow">18. Input Inside Table Row</a>
+<div class="grp">Scenarios</div>
+<a href="#s-delete">19. Delete Scenario</a>
+<a href="#s-edit">20. Edit + Dialog Scenario</a>
+<a href="#s-viewnav">21. View / Detail + Navigation</a>
+<a href="#s-dialog">22. Dialog setBindingContext</a>
+<a href="#s-form">23. Form + bindElement</a>
+<a href="#s-named">24. Named Models</a>
+<a href="#s-multi">25. Multiple Models</a>
+<a href="#s-jsonodata">26. JSON vs OData Model</a>
+<div class="grp">Master it</div>
+<a href="#s-debug">27. Debugging (debugger + console)</a>
+<a href="#s-mistakes">28. 10 Beginner Mistakes</a>
+<a href="#s-visual">29. Visual: Control / Context / Data</a>
+<a href="#s-tree">30. Decision Tree</a>
+<a href="#s-crud">31. Full CRUD Example</a>
+<a href="#s-cheat">32. Complete Cheat Sheet</a>
+<a href="#s-naming">33. Variable Naming (Hungarian)</a>
+<a href="#s-levels">34. Learning Path (15 Levels)</a>
+<a href="#s-quiz">35. Try to Predict (10 Quizzes)</a>
+<a href="#s-sim">36. Mini Debugger Simulation</a>
+<a href="#s-memory">37. One-Page Memory Map</a>
+</div>
+</nav>
+<main>
+
+<div class="hero">
+<span class="badge b-blue">BEGINNER → CONFIDENT</span><span class="badge b-purple">SAPUI5</span><span class="badge b-green">VISUAL + INTERACTIVE</span><span class="badge b-yellow">NO BACKEND NEEDED</span>
+<h2 style="margin:10px 0">Confused by this code? This page fixes it forever.</h2>
+<pre><code><span class="kw">onViewProduct</span>: <span class="kw">function</span> (<span class="fn">oEvent</span>) {
+    <span class="kw">const</span> oControl = oEvent.<span class="fn">getSource</span>();
+    <span class="kw">const</span> oContext = oControl.<span class="fn">getBindingContext</span>();
+    <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<p>After this masterclass you can answer for <b>any</b> event handler: WHAT is oEvent? WHAT is source? WHAT is control/parent? WHAT is binding/context/model/data? WHEN to use each getter?</p>
+<div class="levels"><div class="lvl">👆 <b>Click diagrams</b><br><small>Every blue box is clickable</small></div><div class="lvl">🧪 <b>Try live mocks</b><br><small>Fake table behaves like UI5</small></div><div class="lvl">❓ <b>10 quizzes</b><br><small>Predict before revealing</small></div><div class="lvl">🖨️ <b>Printable</b><br><small>Cheat + memory map (Ctrl+P)</small></div></div>
+</div>
+
+<!-- 1 BIG PICTURE -->
+<section id="s-big"><h2>1. Big Picture: What happens when I click a button?</h2>
+<p>Beginner mental model. Click each step:</p>
+<div class="flow" id="bigFlow"></div>
+<div id="fstepInfo" class="infoBox">👆 Click any step above to learn what it is.</div>
+<div class="note"><b>One sentence:</b> User clicks → UI5 creates an <span class="kbd">oEvent</span> object → <span class="kbd">getSource()</span> gives you the Button control → <span class="kbd">getBindingContext()</span> gives you the address of the row's data → <span class="kbd">getObject()</span> gives you the real business data.</div>
+</section>
+
+<!-- oEvent -->
+<section id="s-oevent"><h2>2. What is <code>oEvent</code>?</h2>
+<span class="badge">LEVEL 1</span>
+<pre><code><span class="cm">&lt;!-- XML View --&gt;</span>
+<span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View"</span> <span class="at">press</span>=<span class="st">".onViewProduct"</span> <span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="cm">// Controller.js</span>
+<span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid2"><div class="card"><h4>✅ oEvent IS</h4><ul><li>An event object created by UI5</li><li>A package of info: <i>who fired + what happened + extra params</i></li><li>Passed automatically: <span class="kbd">onViewProduct(oEvent)</span></li></ul></div><div class="card"><h4>⛔ oEvent is NOT</h4><ul><li>NOT the button itself</li><li>NOT the data</li><li>NOT the model</li></ul></div></div>
+<div class="warn"><b>Beginner warning:</b> <span class="kbd">oEvent</span> ≠ button. To get the button you must call <span class="kbd">oEvent.getSource()</span>.</div>
+<div class="flow"><div class="fstep">User clicks button</div><div class="arrow">↓</div><div class="fstep">UI5 creates event info</div><div class="arrow">↓</div><div class="fstep">UI5 calls onViewProduct(oEvent)</div></div>
+</section>
+
+<!-- getSource -->
+<section id="s-source"><h2>3. <code>oEvent.getSource()</code> — Who triggered this?</h2>
+<span class="badge b-blue">LEVEL 2</span>
+<pre><code><span class="kw">const</span> oControl = oEvent.<span class="fn">getSource</span>();
+<span class="cm">// "Give me the UI5 control that triggered this event."</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">oEvent</div><div class="arrow">↓ getSource()</div><div class="fstep">Button / Input / CheckBox / List / Table</div></div>
+<table><tr><th>Example</th><th>Source</th></tr><tr><td>Press View button</td><td><span class="kbd">sap.m.Button</span></td></tr><tr><td>Type in Input</td><td><span class="kbd">sap.m.Input</span></td></tr><tr><td>Tick CheckBox</td><td><span class="kbd">sap.m.CheckBox</span></td></tr><tr><td>Select List item</td><td><span class="kbd">sap.m.List</span></td></tr><tr><td>Select Table row</td><td><span class="kbd">sap.m.Table</span></td></tr></table>
+<table><tr><th></th><th>What is it?</th><th>Example</th></tr><tr><td><b>oEvent</b></td><td>Envelope with info</td><td>Letter envelope</td></tr><tr><td><b>oEvent.getSource()</b></td><td>The actual control inside</td><td>Letter itself (the Button)</td></tr></table>
+</section>
+
+<!-- getParent -->
+<section id="s-parent"><h2>4. <code>getParent()</code> — Who contains this control?</h2>
+<span class="badge b-purple">LEVEL 4</span>
+<pre><code><span class="kw">const</span> oButton = oEvent.<span class="fn">getSource</span>();
+<span class="kw">const</span> oParent = oButton.<span class="fn">getParent</span>();</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="cm">&lt;!-- Hierarchy --&gt;</span>
+Table
+ └─ ColumnListItem  <span class="cm">(the row)</span>
+     └─ HBox <span class="cm">(cells wrapper if used)</span>
+         └─ Button  <span class="cm">(you clicked here)</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid2"><div class="card"><h4>Button → getParent()</h4><p>Returns <span class="kbd">HBox</span> (or cells container / ColumnListItem depending on XML).</p></div><div class="card"><h4>HBox → getParent()</h4><p>Returns <span class="kbd">ColumnListItem</span> (the row).</p></div></div>
+<div class="danger"><b>Fragile:</b> <span class="kbd">getParent().getParent()</span> breaks if you add/remove an HBox/VBox in XML. Prefer <span class="kbd">oEvent.getSource().getBindingContext()</span> — it doesn't care about hierarchy because the button inherits the row's context.</div>
+<div class="ok"><b>Rule:</b> Use binding context when possible. Use getParent() only when you truly need layout navigation (e.g., find sibling control).</div>
+</section>
+
+<!-- binding -->
+<section id="s-binding"><h2>5. Binding — connecting UI to data (absolute beginner)</h2>
+<span class="badge b-green">LEVEL 5</span>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<p><span class="kbd">{/Products}</span> means: <i>bind the <b>items</b> aggregation to the <b>/Products</b> array in the default model, root (/).</i></p>
+<pre><code>{
+  <span class="st">"Products"</span>: [
+    { <span class="st">"id"</span>: <span class="num">1</span>, <span class="st">"title"</span>: <span class="st">"Laptop"</span>, <span class="st">"price"</span>: <span class="num">50000</span>, <span class="st">"category"</span>: <span class="st">"Electronics"</span> },
+    { <span class="st">"id"</span>: <span class="num">2</span>, <span class="st">"title"</span>: <span class="st">"Phone"</span>, <span class="st">"price"</span>: <span class="num">30000</span>, <span class="st">"category"</span>: <span class="st">"Electronics"</span> }
+  ]
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="note">UI5 loops the array automatically: <b>1 array entry = 1 row (ColumnListItem)</b>. Inside the row, <span class="kbd">{title}</span> means "relative to my row's object". That's why you write <span class="kbd">{id}</span> not <span class="kbd">{/Products/0/id}</span>.</div>
+<table><tr><th>Word</th><th>Meaning (simple)</th></tr><tr><td><b>Binding</b></td><td>The live link between control property/aggregation and model data</td></tr><tr><td><b>Binding Context</b></td><td>The row's "address" e.g. <span class="kbd">/Products/1</span></td></tr><tr><td><b>Control</b></td><td>UI element (Table, Button, Input, Text)</td></tr><tr><td><b>Model</b></td><td>The data container (JSON/OData)</td></tr></table>
+</section>
+
+<!-- table xml -->
+<section id="s-tablexml"><h2>6. Complete Table Example</h2>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;columns&gt;</span>
+    <span class="tg">&lt;Column&gt;&lt;Text</span> <span class="at">text</span>=<span class="st">"ID"</span><span class="tg">/&gt;&lt;/Column&gt;</span>
+    <span class="tg">&lt;Column&gt;&lt;Text</span> <span class="at">text</span>=<span class="st">"Title"</span><span class="tg">/&gt;&lt;/Column&gt;</span>
+    <span class="tg">&lt;Column&gt;&lt;Text</span> <span class="at">text</span>=<span class="st">"Price"</span><span class="tg">/&gt;&lt;/Column&gt;</span>
+    <span class="tg">&lt;Column&gt;&lt;Text</span> <span class="at">text</span>=<span class="st">"Category"</span><span class="tg">/&gt;&lt;/Column&gt;</span>
+    <span class="tg">&lt;Column&gt;&lt;Text</span> <span class="at">text</span>=<span class="st">"Actions"</span><span class="tg">/&gt;&lt;/Column&gt;</span>
+  <span class="tg">&lt;/columns&gt;</span>
+  <span class="tg">&lt;items&gt;</span>
+    <span class="tg">&lt;ColumnListItem&gt;</span>
+      <span class="tg">&lt;cells&gt;</span>
+        <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{id}"</span><span class="tg">/&gt;</span>
+        <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span>
+        <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{price}"</span><span class="tg">/&gt;</span>
+        <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{category}"</span><span class="tg">/&gt;</span>
+        <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View"</span> <span class="at">press</span>=<span class="st">".onViewProduct"</span><span class="tg">/&gt;</span>
+      <span class="tg">&lt;/cells&gt;</span>
+    <span class="tg">&lt;/ColumnListItem&gt;</span>
+  <span class="tg">&lt;/items&gt;</span>
+<span class="tg">&lt;/Table&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="note"><b>Why 5 columns + 5 cells?</b> UI5 pairs them by index: Column[0] is header for cells[0], etc. Template <span class="kbd">ColumnListItem</span> is cloned per product — you write it once, UI5 repeats it.</div>
+<table><tr><th>Part</th><th>Role</th></tr><tr><td>Table</td><td>List container, owns <span class="kbd">items</span> aggregation</td></tr><tr><td>Column</td><td>Header only</td></tr><tr><td>ColumnListItem</td><td>Row template, carries binding context</td></tr><tr><td>cells</td><td>One control per column</td></tr><tr><td>Button</td><td>Action inside row — inherits row context</td></tr></table>
+</section>
+
+<!-- dataflow -->
+<section id="s-dataflow"><h2>7. Table Data Flow → Rows → Contexts</h2>
+<pre><code>Products
+├── Product 0  →  ColumnListItem (Row 1)  →  context /Products/0
+├── Product 1  →  ColumnListItem (Row 2)  →  context /Products/1
+└── Product 2  →  ColumnListItem (Row 3)  →  context /Products/2</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="ok"><b>Binding context = control's connection/address to one piece of model data.</b> Row 2 doesn't store the product — it stores a pointer <span class="kbd">/Products/1</span>. Children (Texts, Buttons) inherit it.</div>
+</section>
+
+<!-- context -->
+<section id="s-context"><h2>8. <code>getBindingContext()</code></h2>
+<span class="badge b-green">LEVEL 6</span>
+<pre><code><span class="kw">const</span> oContext = oControl.<span class="fn">getBindingContext</span>();</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">Control (Button/Row)</div><div class="arrow">↓ getBindingContext()</div><div class="fstep">BindingContext → /Products/1</div></div>
+<div class="warn"><b>Context is NOT the product object.</b> It's a small object with <span class="kbd">getPath()</span>, <span class="kbd">getObject()</span>, <span class="kbd">getProperty()</span>. Think: envelope address vs. house.</div>
+</section>
+
+<!-- object -->
+<section id="s-object"><h2>9. <code>getObject()</code> — entire bound object</h2>
+<span class="badge b-green">LEVEL 7</span>
+<pre><code><span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="cm">// BindingContext → getObject() →</span>
+{ <span class="st">"id"</span>: <span class="num">2</span>, <span class="st">"title"</span>: <span class="st">"Phone"</span>, <span class="st">"price"</span>: <span class="num">30000</span>, <span class="st">"category"</span>: <span class="st">"Electronics"</span> }</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid3"><div class="card"><h4>🎛️ Control</h4><p>What user sees.<br><span class="kbd">Button, Row</span></p></div><div class="card"><h4>📍 Context</h4><p>Where data lives.<br><span class="kbd">/Products/1</span></p></div><div class="card"><h4>📦 Data Object</h4><p>Real values.<br><span class="kbd">{id,title,…}</span></p></div></div>
+</section>
+
+<!-- property -->
+<section id="s-property"><h2>10. <code>getProperty("title")</code> — one field</h2>
+<span class="badge b-green">LEVEL 8</span>
+<pre><code><span class="kw">const</span> sTitle = oContext.<span class="fn">getProperty</span>(<span class="st">"title"</span>); <span class="cm">// "Phone"</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th></th><th>Returns</th><th>When</th></tr><tr><td><b>getObject()</b></td><td>Whole object <span class="kbd">{id,title,price…}</span></td><td>Need many fields / pass to dialog</td></tr><tr><td><b>getProperty("title")</b></td><td>Single value <span class="kbd">"Phone"</span></td><td>Need one field only</td></tr></table>
+</section>
+
+<!-- path -->
+<section id="s-path"><h2>11. <code>getPath()</code> — data location string</h2>
+<span class="badge b-green">LEVEL 9</span>
+<pre><code><span class="kw">const</span> sPath = oContext.<span class="fn">getPath</span>(); <span class="cm">// "/Products/1"</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<p>Useful for: <span class="badge">debugging</span><span class="badge">navigation</span><span class="badge">bindElement({path})</span><span class="badge">identifying selection</span></p>
+</section>
+
+<!-- model -->
+<section id="s-model"><h2>12. <code>getModel()</code></h2>
+<span class="badge b-green">LEVEL 10</span>
+<pre><code><span class="kw">const</span> oModel = oControl.<span class="fn">getModel</span>(); <span class="cm">// default model</span>
+<span class="kw">const</span> oM2 = oControl.<span class="fn">getModel</span>(<span class="st">"products"</span>); <span class="cm">// named model</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th>Concept</th><th>Analogy</th></tr><tr><td><b>Model</b></td><td>Whole library</td></tr><tr><td><b>Context</b></td><td>One shelf mark (/Products/1)</td></tr><tr><td><b>Data object</b></td><td>The book itself</td></tr></table>
+</section>
+
+<!-- byId -->
+<section id="s-byid"><h2>13. <code>this.byId()</code> vs <code>getSource()</code></h2>
+<span class="badge b-yellow">LEVEL 11</span>
+<pre><code><span class="kw">const</span> oInput = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productNameInput"</span>);</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th></th><th>Meaning</th><th>Example</th></tr><tr><td><b>oEvent.getSource()</b></td><td>Control that fired <i>this</i> event</td><td>Which View button was clicked?</td></tr><tr><td><b>this.byId("...")</b></td><td>Control with this view ID (anywhere in view)</td><td>Get search field / form input / dialog</td></tr></table>
+<div class="warn">IDs are prefixed by view ID at runtime (<span class="kbd">__xmlview0--productNameInput</span>). Always use <span class="kbd">this.byId()</span>, never <span class="kbd">document.getElementById</span>.</div>
+</section>
+
+<!-- params -->
+<section id="s-params"><h2>14. <code>oEvent.getParameter()</code> — event-specific info</h2>
+<span class="badge b-blue">LEVEL 3</span>
+<div class="danger"><b>Key accuracy rule:</b> Parameters depend on the <b>control + event</b>. Check API docs for each event. Not every event has the same params.</div>
+<h3>Input — change</h3>
+<pre><code><span class="tg">&lt;Input</span> <span class="at">change</span>=<span class="st">".onInputChange"</span> <span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onInputChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> sValue = oEvent.<span class="fn">getParameter</span>(<span class="st">"value"</span>);
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<p><span class="kbd">getSource()</span> → Input control. <span class="kbd">getParameter("value")</span> → typed text.</p>
+<h3>CheckBox — select</h3>
+<pre><code><span class="tg">&lt;CheckBox</span> <span class="at">select</span>=<span class="st">".onSelect"</span> <span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onSelect</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> bSelected = oEvent.<span class="fn">getParameter</span>(<span class="st">"selected"</span>); <span class="cm">// true/false</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<h3>List — selectionChange</h3>
+<pre><code><span class="tg">&lt;List</span> <span class="at">selectionChange</span>=<span class="st">".onSelectionChange"</span><span class="tg">&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onSelectionChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oItem = oEvent.<span class="fn">getParameter</span>(<span class="st">"listItem"</span>);
+  <span class="kw">const</span> oContext = oItem.<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> oData = oContext.<span class="fn">getObject</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<h3>ComboBox — change</h3>
+<pre><code><span class="fn">onComboChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oSel = oEvent.<span class="fn">getParameter</span>(<span class="st">"selectedItem"</span>);
+  <span class="kw">const</span> sKey = oSel && oSel.<span class="fn">getKey</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="warn">Always guard: user may clear ComboBox → <span class="kbd">selectedItem</span> is null.</div>
+</section>
+
+<!-- compare -->
+<section id="s-compare"><h2>15. ⭐ Main Cheat Table</h2>
+<table><tr><th>Method</th><th>Meaning</th><th>Returns</th></tr>
+<tr><td><span class="kbd">getSource()</span></td><td>Who triggered event?</td><td>UI5 Control</td></tr>
+<tr><td><span class="kbd">getParameter()</span></td><td>Event-specific info</td><td>Value / Object</td></tr>
+<tr><td><span class="kbd">getParent()</span></td><td>Parent control</td><td>UI5 Control</td></tr>
+<tr><td><span class="kbd">getBindingContext()</span></td><td>Data context</td><td>BindingContext</td></tr>
+<tr><td><span class="kbd">getObject()</span></td><td>Entire bound object</td><td>Data object</td></tr>
+<tr><td><span class="kbd">getProperty()</span></td><td>One field</td><td>Property value</td></tr>
+<tr><td><span class="kbd">getPath()</span></td><td>Data location</td><td>String path</td></tr>
+<tr><td><span class="kbd">getModel()</span></td><td>Associated model</td><td>Model</td></tr>
+<tr><td><span class="kbd">byId()</span></td><td>Find control by view ID</td><td>UI5 Control</td></tr></table>
+</section>
+
+<!-- main scenario -->
+<section id="s-main"><h2>16. Main Scenario: Button inside Table Row (line by line)</h2>
+<pre><code><span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oButton = oEvent.<span class="fn">getSource</span>();      <span class="cm">// 1. clicked Button</span>
+  <span class="kw">const</span> oContext = oButton.<span class="fn">getBindingContext</span>(); <span class="cm">// 2. row address</span>
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();       <span class="cm">// 3. real data</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow" id="viewFlow"></div>
+<div id="viewInfo" class="infoBox">👆 Click a step.</div>
+<div class="note">Why does <span class="kbd">oButton.getBindingContext()</span> work even though the button itself has no <span class="kbd">items="{...}"</span>? Because contexts <b>propagate down</b>: Row has context → children inherit it.</div>
+</section>
+
+<!-- alt -->
+<section id="s-alt"><h2>17. Alternative via <code>getParent()</code> (and why shorter is better)</h2>
+<pre><code><span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oButton = oEvent.<span class="fn">getSource</span>();
+  <span class="kw">const</span> oRow = oButton.<span class="fn">getParent</span>(); <span class="cm">// assumes parent IS the row!</span>
+  <span class="kw">const</span> oContext = oRow.<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="warn">Works only if parent really is <span class="kbd">ColumnListItem</span>. If Button is wrapped in HBox/VBox, you need <span class="kbd">getParent().getParent()</span>. XML change = broken code.</div>
+<div class="ok"><b>Preferred (cleaner):</b> <span class="kbd">const oContext = oEvent.getSource().getBindingContext();</span> — independent of layout hierarchy.</div>
+</section>
+
+<!-- input row -->
+<section id="s-inputrow"><h2>18. Input Inside Table Row (all 4 concepts at once)</h2>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;ColumnListItem&gt;</span>
+    <span class="tg">&lt;Input</span> <span class="at">value</span>=<span class="st">"{title}"</span> <span class="at">change</span>=<span class="st">".onTitleChange"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;/ColumnListItem&gt;</span>
+<span class="tg">&lt;/Table&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onTitleChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oInput = oEvent.<span class="fn">getSource</span>();       <span class="cm">// which Input?</span>
+  <span class="kw">const</span> oContext = oInput.<span class="fn">getBindingContext</span>(); <span class="cm">// which row?</span>
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();       <span class="cm">// old data</span>
+  <span class="kw">const</span> sNew = oEvent.<span class="fn">getParameter</span>(<span class="st">"value"</span>);  <span class="cm">// new text</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+</section>
+
+<!-- delete -->
+<section id="s-delete"><h2>19. Delete Button Scenario</h2>
+<pre><code><span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://delete"</span> <span class="at">press</span>=<span class="st">".onDeleteProduct"</span> <span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onDeleteProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oContext = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();
+  <span class="cm">// oProduct.id → delete from model / backend</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">Delete button</div><div class="arrow">↓</div><div class="fstep">Product context (/Products/1)</div><div class="arrow">↓</div><div class="fstep">Product ID</div><div class="arrow">↓</div><div class="fstep">Backend / model delete</div></div>
+</section>
+
+<!-- edit -->
+<section id="s-edit"><h2>20. Edit Button → Open Dialog with Row Data</h2>
+<pre><code><span class="fn">onEditProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oProduct = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+  <span class="cm">// copy to dialog model, then open dialog</span>
+  <span class="kw">this</span>.<span class="fn">openEditDialog</span>(oProduct);
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">Edit button</div><div class="arrow">↓</div><div class="fstep">getSource → getBindingContext → getObject</div><div class="arrow">↓</div><div class="fstep">Load into form / dialog</div></div>
+</section>
+
+<!-- view nav -->
+<section id="s-viewnav"><h2>21. View Button → Detail Page Navigation</h2>
+<pre><code><span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oContext = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> sPath = oContext.<span class="fn">getPath</span>(); <span class="cm">// "/Products/1"</span>
+  <span class="kw">const</span> oRouter = <span class="kw">this</span>.<span class="fn">getOwnerComponent</span>().<span class="fn">getRouter</span>();
+  oRouter.<span class="fn">navTo</span>(<span class="st">"detail"</span>, { <span class="at">productPath</span>: <span class="fn">encodeURIComponent</span>(sPath) });
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">View</div><div class="arrow">↓</div><div class="fstep">Context → ID / Path</div><div class="arrow">↓</div><div class="fstep">navTo detail</div><div class="arrow">↓</div><div class="fstep">Detail page bindElement(path)</div></div>
+</section>
+
+<!-- dialog -->
+<section id="s-dialog"><h2>22. Dialog: <code>setBindingContext()</code> (no manual copying!)</h2>
+<pre><code><span class="kw">const</span> oContext = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>();
+oDialog.<span class="fn">setBindingContext</span>(oContext); <span class="cm">// same model/default</span>
+oDialog.<span class="fn">open</span>();</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="tg">&lt;Dialog&gt;</span>
+  <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{price}"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{category}"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;/Dialog&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="ok">Dialog inherits context → relative bindings <span class="kbd">{title}</span> resolve automatically. No need to pass each property.</div>
+</section>
+
+<!-- form -->
+<section id="s-form"><h2>23. Form: <code>bindElement()</code></h2>
+<span class="badge b-yellow">LEVEL 12</span>
+<pre><code><span class="kw">this</span>.<span class="fn">getView</span>().<span class="fn">bindElement</span>({ <span class="at">path</span>: oContext.<span class="fn">getPath</span>() });</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="tg">&lt;Input</span> <span class="at">value</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;Input</span> <span class="at">value</span>=<span class="st">"{price}"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;Input</span> <span class="at">value</span>=<span class="st">"{category}"</span><span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="flow"><div class="fstep">View</div><div class="arrow">↓ bindElement(path)</div><div class="fstep">Selected product</div><div class="arrow">↓</div><div class="fstep">Form auto-displays fields</div></div>
+</section>
+
+<!-- named -->
+<section id="s-named"><h2>24. Named Models: <code>getBindingContext("products")</code></h2>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">items</span>=<span class="st">"{products&gt;/Products}"</span><span class="tg">&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="kw">const</span> oCtxDefault = oControl.<span class="fn">getBindingContext</span>(); <span class="cm">// default (no name)</span>
+<span class="kw">const</span> oCtxNamed = oControl.<span class="fn">getBindingContext</span>(<span class="st">"products"</span>);</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="warn"><b>Forgetting the name = #1 named-model bug.</b> If binding is <span class="kbd">{products&gt;...}</span>, then <span class="kbd">getBindingContext()</span> without name returns null. Names must match!</div>
+</section>
+
+<!-- multi -->
+<section id="s-multi"><h2>25. Multiple Models at Once</h2>
+<pre><code><span class="cm">// manifest / Component: default, user, cart</span>
+<span class="kw">const</span> oProd = oControl.<span class="fn">getBindingContext</span>(); <span class="cm">// default → Products</span>
+<span class="kw">const</span> oUser = oControl.<span class="fn">getBindingContext</span>(<span class="st">"user"</span>);
+<span class="kw">const</span> oCart = oControl.<span class="fn">getBindingContext</span>(<span class="st">"cart"</span>);</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th>Model</th><th>Holds</th><th>Example binding</th></tr><tr><td>default</td><td>Products</td><td><span class="kbd">{title}</span></td></tr><tr><td>user</td><td>Current user</td><td><span class="kbd">{user&gt;/name}</span></td></tr><tr><td>cart</td><td>Shopping cart</td><td><span class="kbd">{cart&gt;/items}</span></td></tr></table>
+</section>
+
+<!-- json odata -->
+<section id="s-jsonodata"><h2>26. JSONModel vs OData V2/V4 (beginner-safe intro)</h2>
+<div class="grid2"><div class="card"><h4>🗂️ JSONModel</h4><ul><li>Client-side object</li><li><span class="kbd">oModel.getData()</span> works</li><li><span class="kbd">getObject()/getProperty()</span> read local data</li><li>Great for learning</li></ul></div><div class="card"><h4>🌐 ODataModel (V2/V4)</h4><ul><li>Server-driven, async</li><li>Do NOT assume <span class="kbd">getData()</span> exists same way</li><li>Context may need to load; use bindings + events</li><li>V4 contexts have different APIs in places</li></ul></div></div>
+<div class="warn">Don't assume <span class="kbd">oModel.getData()</span> works for every model. For OData, rely on contexts/bindings, not raw data dumps.</div>
+</section>
+
+<!-- debug -->
+<section id="s-debug"><h2>27. Debugging Like a Pro</h2>
+<pre><code><span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">debugger</span>;
+  <span class="kw">const</span> oControl = oEvent.<span class="fn">getSource</span>();
+  <span class="kw">const</span> oContext = oControl.<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<ol><li>Open Chrome/Edge DevTools (F12) → Sources.</li><li>Trigger the button → code pauses at <span class="kbd">debugger</span>.</li><li>Hover each variable. Expand <span class="kbd">oEvent</span>, <span class="kbd">oControl</span>, <span class="kbd">oContext</span>, <span class="kbd">oProduct</span>.</li></ol>
+<table><tr><th>Variable</th><th>Should be</th></tr><tr><td><span class="kbd">oEvent</span></td><td>Event object</td></tr><tr><td><span class="kbd">oControl</span></td><td>Button</td></tr><tr><td><span class="kbd">oContext</span></td><td>BindingContext (/Products/1)</td></tr><tr><td><span class="kbd">oProduct</span></td><td>Product object</td></tr></table>
+<div class="note"><span class="kbd">console.log(oProduct)</span> may trigger ESLint <span class="kbd">no-console</span>. That's a lint rule, not a JS error. Use <span class="kbd">// eslint-disable-next-line no-console</span> or prefer <span class="kbd">debugger</span> while learning.</div>
+</section>
+
+<!-- mistakes -->
+<section id="s-mistakes"><h2>28. 10 Common Beginner Mistakes</h2>
+<div id="mistakes"></div>
+</section>
+
+<!-- visual -->
+<section id="s-visual"><h2>29. Big Visual: View → Control → Model / Context → Data</h2>
+<pre><code>                UI5 VIEW
+                   │
+                   ▼
+                CONTROL
+                   │
+          ┌────────┴─────────┐
+          │                  │
+     getModel()       getBindingContext()
+          │                  │
+          ▼                  ▼
+        MODEL             CONTEXT
+                             │
+                    ┌────────┴────────┐
+                    │                 │
+               getPath()        getObject()
+                                      │
+                                      ▼
+                                   DATA</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid2"><div class="card"><b>getModel()</b> → whole data container</div><div class="card"><b>getBindingContext()</b> → address of this row</div><div class="card"><b>getPath()</b> → address as string</div><div class="card"><b>getObject()</b> → real business object</div></div>
+</section>
+
+<!-- tree -->
+<section id="s-tree"><h2>30. Interactive Decision Tree: "I have an event. What now?"</h2>
+<div class="treeQ" id="treeBox"><h3 id="treeQ" style="margin:0"></h3><div class="opts" id="treeOpts"></div><div id="treeRes" style="margin-top:12px"></div><div class="noPrint" style="margin-top:10px"><button class="btn ghost" onclick="treeRestart()">↺ Restart</button></div></div>
+</section>
+
+<!-- crud -->
+<section id="s-crud"><h2>31. Real-World CRUD: Product Management</h2>
+<p>Features: table + search + select + add/view/edit/delete + dialog.</p>
+<details open><summary>XML View (sap.m.Table + Dialog)</summary>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"tbl"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span> <span class="at">mode</span>=<span class="st">"SingleSelectMaster"</span> <span class="at">selectionChange</span>=<span class="st">".onRowSelect"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;headerToolbar&gt;</span><span class="tg">&lt;Toolbar&gt;</span>
+    <span class="tg">&lt;SearchField</span> <span class="at">search</span>=<span class="st">".onSearch"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Add"</span> <span class="at">press</span>=<span class="st">".onAdd"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;/Toolbar&gt;&lt;/headerToolbar&gt;</span>
+  <span class="tg">&lt;columns&gt;</span>... ID / Title / Price / Category / Actions ...<span class="tg">&lt;/columns&gt;</span>
+  <span class="tg">&lt;items&gt;</span><span class="tg">&lt;ColumnListItem&gt;</span><span class="tg">&lt;cells&gt;</span>
+    <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{id}"</span><span class="tg">/&gt;</span><span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{price}"</span><span class="tg">/&gt;</span><span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{category}"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;HBox&gt;</span><span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View"</span> <span class="at">press</span>=<span class="st">".onViewProduct"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://edit"</span> <span class="at">press</span>=<span class="st">".onEditProduct"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://delete"</span> <span class="at">press</span>=<span class="st">".onDeleteProduct"</span><span class="tg">/&gt;</span><span class="tg">&lt;/HBox&gt;</span>
+  <span class="tg">&lt;/cells&gt;</span><span class="tg">&lt;/ColumnListItem&gt;</span><span class="tg">&lt;/items&gt;</span>
+<span class="tg">&lt;/Table&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre></details>
+<details open><summary>Controller.js</summary>
+<pre><code><span class="fn">onViewProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oProduct = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+  <span class="fn">MessageBox</span>.<span class="fn">show</span>(oProduct.title + <span class="st">" – "</span> + oProduct.price);
+},
+<span class="fn">onRowSelect</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oItem = oEvent.<span class="fn">getParameter</span>(<span class="st">"listItem"</span>);
+  <span class="kw">const</span> oProduct = oItem.<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+},
+<span class="fn">onSearch</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> sQ = oEvent.<span class="fn">getParameter</span>(<span class="st">"query"</span>);
+  <span class="cm">// filter table binding by title</span>
+},
+<span class="fn">onDeleteProduct</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> sPath = oEvent.<span class="fn">getSource</span>().<span class="fn">getBindingContext</span>().<span class="fn">getPath</span>();
+  <span class="cm">// remove /Products entry at sPath from JSONModel</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre></details>
+<div class="note">Every handler follows the same rhythm: <b>source → context → object/path → action</b>. Toolbar Add/Search buttons have <b>no row context</b> — use <span class="kbd">byId/table binding</span> there, not <span class="kbd">getBindingContext()</span>.</div>
+</section>
+
+<!-- cheat -->
+<section id="s-cheat"><h2>32. Complete Cheat Sheet (printable)</h2>
+<table><tr><th>API</th><th>What / When</th><th>Returns</th><th>Example</th></tr>
+<tr><td><span class="kbd">oEvent.getSource()</span></td><td>Who fired? Always first in press/change/select</td><td>Control</td><td><span class="kbd">const oB=oEvent.getSource()</span></td></tr>
+<tr><td><span class="kbd">oEvent.getParameter(x)</span></td><td>Event extra (value/selected/listItem)</td><td>any</td><td><span class="kbd">getParameter("value")</span></td></tr>
+<tr><td><span class="kbd">oControl.getParent()</span></td><td>Walk layout up</td><td>Control</td><td><span class="kbd">oBtn.getParent()</span></td></tr>
+<tr><td><span class="kbd">getBindingContext([name])</span></td><td>Row address object</td><td>Context|null</td><td><span class="kbd">oB.getBindingContext()</span></td></tr>
+<tr><td><span class="kbd">oContext.getObject()</span></td><td>Whole row object</td><td>Object</td><td><span class="kbd">oCtx.getObject()</span></td></tr>
+<tr><td><span class="kbd">getProperty(name)</span></td><td>One field</td><td>any</td><td><span class="kbd">getProperty("title")</span></td></tr>
+<tr><td><span class="kbd">getPath()</span></td><td>Location string</td><td>string</td><td><span class="kbd">"/Products/1"</span></td></tr>
+<tr><td><span class="kbd">getModel([name])</span></td><td>Data container</td><td>Model</td><td><span class="kbd">oC.getModel()</span></td></tr>
+<tr><td><span class="kbd">this.byId(id)</span></td><td>Find view control</td><td>Control</td><td><span class="kbd">this.byId("tbl")</span></td></tr>
+<tr><td><span class="kbd">bindElement({path})</span></td><td>Bind view/form to one object</td><td>—</td><td><span class="kbd">bindElement({path:"/Products/1"})</span></td></tr>
+<tr><td><span class="kbd">dialog.setBindingContext(ctx)</span></td><td>Give dialog row context</td><td>—</td><td><span class="kbd">dlg.setBindingContext(oCtx)</span></td></tr></table>
+<div class="noPrint"><button class="btn" onclick="window.print()">🖨️ Print cheat sheet</button></div>
+</section>
+
+<!-- naming -->
+<section id="s-naming"><h2>33. Variable Naming (Hungarian convention)</h2>
+<table><tr><th>Prefix</th><th>Type</th><th>Example</th></tr><tr><td><span class="kbd">o</span></td><td>object/control/context</td><td><span class="kbd">oEvent,oButton,oContext,oProduct</span></td></tr><tr><td><span class="kbd">s</span></td><td>string</td><td><span class="kbd">sTitle,sPath,sValue</span></td></tr><tr><td><span class="kbd">n/i</span></td><td>number/int</td><td><span class="kbd">nPrice,iIndex</span></td></tr><tr><td><span class="kbd">b</span></td><td>boolean</td><td><span class="kbd">bSelected</span></td></tr><tr><td><span class="kbd">a</span></td><td>array</td><td><span class="kbd">aProducts</span></td></tr><tr><td><span class="kbd">m</span></td><td>map</td><td><span class="kbd">mParams</span></td></tr></table>
+<div class="note">Conventions only — JS doesn't enforce them. But SAPUI5 code reviews expect them.</div>
+</section>
+
+<!-- levels -->
+<section id="s-levels"><h2>34. Learning Path — 15 Levels</h2>
+<div class="levels">
+<div class="lvl"><b>L1 oEvent</b><br><small>The envelope</small></div><div class="lvl"><b>L2 getSource</b><br><small>Who fired?</small></div><div class="lvl"><b>L3 getParameter</b><br><small>Event extras</small></div><div class="lvl"><b>L4 getParent</b><br><small>Layout walk</small></div><div class="lvl"><b>L5 binding</b><br><small>{/Products}</small></div><div class="lvl"><b>L6 getBindingContext</b><br><small>Row address</small></div><div class="lvl"><b>L7 getObject</b><br><small>Whole data</small></div><div class="lvl"><b>L8 getProperty</b><br><small>One field</small></div><div class="lvl"><b>L9 getPath</b><br><small>Location str</small></div><div class="lvl"><b>L10 getModel</b><br><small>Container</small></div><div class="lvl"><b>L11 byId</b><br><small>Find by ID</small></div><div class="lvl"><b>L12 bindElement</b><br><small>Detail bind</small></div><div class="lvl"><b>L13 Dialogs</b><br><small>setBindingContext</small></div><div class="lvl"><b>L14 Navigation</b><br><small>Router+path</small></div><div class="lvl"><b>L15 OData/CAP</b><br><small>Real backend</small></div>
+</div>
+</section>
+
+<!-- quiz -->
+<section id="s-quiz"><h2>35. ✍️ Try to Predict — 10 Exercises</h2>
+<p>Click an option, then reveal.</p>
+<div id="quizzes"></div>
+</section>
+
+<!-- sim -->
+<section id="s-sim"><h2>36. 🧪 Mini Debugger Simulation (live mock)</h2>
+<p>Click <b>View</b> on any row. Then click each variable to inspect — just like DevTools.</p>
+<div class="mockTable" id="mockTbl"></div>
+<div id="debuggerSim">
+<div><h4 style="margin:0">Variables</h4><div id="dbgVars"></div></div>
+<div><h4 style="margin:0">Inspector</h4><div id="dbgInspect" class="infoBox">Click View first.</div></div>
+</div>
+</section>
+
+<!-- memory -->
+<section id="s-memory"><h2>37. ⭐ One-Page Memory Map</h2>
+<div class="printArea">
+<div class="grid2">
+<div><pre><code>EVENT
+ ↓ getSource()
+CONTROL
+ ↓ getBindingContext()
+CONTEXT
+ ↓ getObject()
+DATA</code></pre></div>
+<div><pre><code>EVENT DATA → getParameter()
+HIERARCHY  → getParent()
+MODEL      → getModel()
+BY ID      → this.byId()
+ONE FIELD  → getProperty()
+LOCATION   → getPath()</code></pre></div>
+</div>
+<p style="text-align:center"><b>Source → Context → Object.</b> Everything else is a variation. <button class="btn" onclick="window.print()">🖨️ Print</button></p>
+</div>
+<div class="ok"><b>Accuracy reminder:</b> A control only has a useful binding context when it is bound or inherits one (e.g., inside a bound row). Toolbar buttons don't. Event parameters differ per control/event — always check the API. Never invent APIs.</div>
+</section>
+
+<footer style="text-align:center;color:var(--muted);padding:20px;font-size:13px">UI5 Event + Binding Context Masterclass • Single-file tutorial • Open in any browser • SAPUI5™ is a trademark of SAP SE</footer>
+</main>
+</div>
+<script>
+function copyCode(btn){var pre=btn.parentElement;var txt=pre.innerText.replace(/Copy$/,'');navigator.clipboard.writeText(txt).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy'},1200)})}
+function filterNav(q){q=q.toLowerCase();document.querySelectorAll('#navLinks a').forEach(function(a){a.style.display=a.textContent.toLowerCase().includes(q)?'':'none'})}
+document.querySelectorAll('#sidebar a').forEach(function(a){a.addEventListener('click',function(){if(window.innerWidth<900)document.getElementById('sidebar').classList.remove('open')} )});
+// Big picture flow
+var bigSteps=[
+{t:'USER',d:'A human interacting with the app. Clicks, types, selects.'},
+{t:'CLICK BUTTON (sap.m.Button + press event)',d:'The press event fires. UI5 prepares to call your controller method.'},
+{t:'UI5 EVENT',d:'UI5 creates an event object with type, source ref, and parameters.'},
+{t:'oEvent',d:'The object passed to onViewProduct(oEvent). NOT the button — the envelope.'},
+{t:'oEvent.getSource()',d:'Returns the control that fired: the Button. Code: const oButton = oEvent.getSource();'},
+{t:'UI5 CONTROL (Button)',d:'A sap.m.Button instance. Has getParent/getBindingContext/getModel methods.'},
+{t:'getBindingContext()',d:'Asks: what row data are you connected to? Inherits context from ColumnListItem row.'},
+{t:'BindingContext (/Products/1)',d:'Lightweight pointer: path + model ref. NOT data yet. Has getObject/getProperty/getPath.'},
+{t:'getObject()',d:'Resolves pointer → real JS object {id,title,price,category}.'},
+{t:'BUSINESS DATA {id:2,title:"Phone",...}',d:'Use it: show MessageBox, open dialog, navigate, delete, update model.'}];
+var bf=document.getElementById('bigFlow'),bi=document.getElementById('fstepInfo');
+bigSteps.forEach(function(s,i){var d=document.createElement('div');d.className='fstep';d.innerHTML='<b>'+(i+1)+'. '+s.t+'</b>';d.onclick=function(){document.querySelectorAll('#bigFlow .fstep').forEach(function(x){x.classList.remove('active')});d.classList.add('active');bi.innerHTML='<b>'+s.t+'</b><br>'+s.d};bf.appendChild(d);if(i<bigSteps.length-1){var a=document.createElement('div');a.className='arrow';a.textContent='↓';bf.appendChild(a)}});
+// View flow
+var vSteps=[
+{t:'Click View',d:'User presses button in row 2.'},
+{t:'oButton = oEvent.getSource()',d:'You now hold the sap.m.Button.'},
+{t:'oContext = oButton.getBindingContext()',d:'You now hold BindingContext /Products/1.'},
+{t:'oProduct = oContext.getObject()',d:'You now hold {id:2,title:"Phone",...}. Show/edit/delete it!'}];
+var vf=document.getElementById('viewFlow'),vi=document.getElementById('viewInfo');
+vSteps.forEach(function(s,i){var d=document.createElement('div');d.className='fstep';d.innerHTML='<b>'+s.t+'</b>';d.onclick=function(){vf.querySelectorAll('.fstep').forEach(function(x){x.classList.remove('active')});d.classList.add('active');vi.innerHTML='<b>'+s.t+'</b><br>'+s.d};vf.appendChild(d);if(i<vSteps.length-1){var a=document.createElement('div');a.className='arrow';a.textContent='↓';vf.appendChild(a)}});
+// Mistakes
+var mistakes=[
+{w:'const oProduct = oEvent; // thinking oEvent is the button',why:'oEvent is the envelope, not the control.',r:'const oButton = oEvent.getSource();'},
+{w:'const oData = oEvent.getSource(); // thinking source returns data',why:'getSource returns a Control (Button). Data needs context+object.',r:'const oData = oEvent.getSource().getBindingContext().getObject();'},
+{w:'const oData = oBtn.getBindingContext(); // thinking context IS data',why:'Context is a pointer (/Products/1), not values.',r:'const oData = oBtn.getBindingContext().getObject();'},
+{w:'Using oContext.title directly (forgetting getObject)',why:'Context has methods, not your fields.',r:'const s = oContext.getProperty("title"); // or getObject().title'},
+{w:'oBtn.getParent().getParent()... deep chains',why:'Breaks when XML layout changes.',r:'oEvent.getSource().getBindingContext() // layout-independent'},
+{w:'Calling getBindingContext() on toolbar Add button, getting null',why:'Toolbar is not inside a row → no row context.',r:'Use this.byId("tbl").getBinding() / selectedItem instead.'},
+{w:'getBindingContext() returns null with named model {products>...}',why:'Name mismatch.',r:'getBindingContext("products") // must match'},
+{w:'getParameter("value") on a Button press',why:'Params differ per event. Button press has no "value".',r:'Check API: Input/change→value, CheckBox→selected, List→listItem.'},
+{w:'Assuming every event has listItem/selectedItem',why:'Only selection events do.',r:'Read event docs per control.'},
+{w:'this.byId("myBtn") to get clicked row button',why:'byId finds one static control, not which row was clicked.',r:'Use oEvent.getSource() for "which one fired".'}];
+var mDiv=document.getElementById('mistakes');
+mistakes.forEach(function(m,i){var d=document.createElement('details');d.innerHTML='<summary>'+(i+1)+'. '+m.w+'</summary><div class="danger"><b>Why wrong:</b> '+m.why+'</div><div class="ok"><b>Correct:</b> <span class="kbd">'+m.r+'</span></div>';mDiv.appendChild(d)});
+// Decision tree
+var treeStep=0;
+function treeRestart(){treeStep=0;renderTree()}
+function renderTree(){
+var q=document.getElementById('treeQ'),o=document.getElementById('treeOpts'),r=document.getElementById('treeRes');r.innerHTML='';
+var steps=[
+{q:'Q1: Do you need the control that fired the event?',opts:['YES → getSource()','NO → next'],res:['const oControl = oEvent.getSource(); // the Button/Input/...',null]},
+{q:'Q2: Does the event carry special info (typed text, tick, selected item)?',opts:['YES → getParameter()','NO → next'],res:['oEvent.getParameter("value" | "selected" | "listItem" | "selectedItem") — check event docs',null]},
+{q:'Q3: Do you need the data behind the control?',opts:['YES → getBindingContext()','NO → maybe byId/getModel'],res:['const oCtx = oControl.getBindingContext("nameIfNamed");',null]},
+{q:'Q4: Whole object or one field?',opts:['Whole → getObject()','One field → getProperty()'],res:['oCtx.getObject() → {id,title,...}','oCtx.getProperty("title") → "Phone"']},
+{q:'Q5: Need model or path? Done!',opts:['getModel()','getPath()'],res:['oControl.getModel() → update/read model','oCtx.getPath() → "/Products/1" for nav/debug/bindElement']}];
+if(treeStep>=steps.length){q.textContent='Done — you know the chain!';o.innerHTML='';r.innerHTML='<div class="ok">Chain: <b>source → (parameter) → context → object/property + path/model</b></div>';return}
+q.textContent=steps[treeStep].q;o.innerHTML='';
+steps[treeStep].opts.forEach(function(t,i){var b=document.createElement('button');b.className='btn ghost';b.textContent=t;b.onclick=function(){var rr=steps[treeStep].res[i];if(rr){r.innerHTML='<div class="infoBox">✅ <span class="kbd">'+rr+'</span></div>'}else{treeStep++;renderTree()}};o.appendChild(b)});
+}
+renderTree();
+// Quiz
+var quiz=[
+{q:'<Button press=".onPress"/> — what does oEvent.getSource() return?',opts:['A. Product object','B. Button control','C. BindingContext','D. Model'],a:1,ex:'getSource = the control that fired. Data needs context+object.'},
+{q:'What does getParent() return?',opts:['A. Data object','B. Parent UI5 control','C. Model path','D. Event value'],a:1,ex:'Parent in the view hierarchy, e.g. Button→HBox.'},
+{q:'Row 2 (/Products/1): getBindingContext() returns?',opts:['A. {id:2,...}','B. "Phone"','C. BindingContext pointing to /Products/1','D. The Table'],a:2,ex:'Context is the pointer, not the values.'},
+{q:'How to get the whole product object?',opts:['A. oContext.getObject()','B. oContext.getPath()','C. oEvent.getParameter()','D. oButton.getParent()'],a:0,ex:'getObject resolves context → data.'},
+{q:'Only the title "Phone"?',opts:['A. getObject()','B. getProperty("title")','C. getSource()','D. getModel()'],a:1,ex:'One field → getProperty.'},
+{q:'Input change: how to get typed text?',opts:['A. getProperty("value")','B. getParameter("value")','C. getSource().title','D. byId("value")'],a:1,ex:'Event extras → getParameter. Property is for contexts.'},
+{q:'What does getPath() return?',opts:['A. Object','B. Control','C. String like /Products/1','D. Boolean'],a:2,ex:'Path string — great for nav/debug/bindElement.'},
+{q:'What does getModel() return?',opts:['A. The Model','B. A row','C. A string','D. An event'],a:0,ex:'Whole data container.'},
+{q:'this.byId("tbl") returns?',opts:['A. Fired control','B. Control with that view ID','C. Context','D. Product'],a:1,ex:'byId = find by ID; getSource = who fired.'},
+{q:'Table uses {products>/Products}. Correct context call?',opts:['A. getBindingContext()','B. getBindingContext("products")','C. getSource("products")','D. getObject("products")'],a:1,ex:'Named binding needs the name.'}];
+var qd=document.getElementById('quizzes');
+quiz.forEach(function(z,i){var d=document.createElement('div');d.className='quiz';d.innerHTML='<b>Q'+(i+1)+'. '+z.q+'</b>';z.opts.forEach(function(op,oi){var b=document.createElement('button');b.textContent=op;b.onclick=function(){if(oi===z.a){b.style.borderColor='#22c55e';b.textContent+=' ✓'}else{b.style.borderColor='#f87171';b.textContent+=' ✗'}};d.appendChild(b)});var rb=document.createElement('button');rb.className='btn ghost';rb.style.marginTop='8px';rb.textContent='Show answer';var an=document.createElement('div');an.className='ans infoBox';an.innerHTML='<b>Answer: '+z.opts[z.a]+'</b><br>'+z.ex;rb.onclick=function(){an.style.display=an.style.display==='block'?'none':'block'};d.appendChild(rb);d.appendChild(an);qd.appendChild(d)});
+// Mock debugger sim
+var products=[{id:1,title:'Laptop',price:50000,category:'Electronics'},{id:2,title:'Phone',price:30000,category:'Electronics'},{id:3,title:'Tablet',price:20000,category:'Electronics'}];
+var mt=document.getElementById('mockTbl');
+mt.innerHTML='<div class="mrow head"><div>ID</div><div>Title</div><div>Price</div><div>Category</div><div>Actions</div></div>';
+products.forEach(function(p,idx){var r=document.createElement('div');r.className='mrow';r.innerHTML='<div>'+p.id+'</div><div>'+p.title+'</div><div>'+p.price+'</div><div>'+p.category+'</div><div></div>';var c=r.lastChild;
+[['View','view',idx],['Edit','edit',idx],['Del','del',idx]].forEach(function(x){var b=document.createElement('button');b.className='miniBtn '+x[1];b.textContent=x[0];b.onclick=function(){simulateDebug(idx)};c.appendChild(b)});
+mt.appendChild(r)});
+function simulateDebug(idx){
+var p=products[idx],path='/Products/'+idx;
+var vars=[
+{k:'oEvent',t:'Event object (press)',j:JSON.stringify({type:'press',source:'Button#viewBtn-'+idx,parameters:{}},null,2)},
+{k:'oButton (getSource())',t:'sap.m.Button that was clicked',j:JSON.stringify({type:'sap.m.Button',text:'View',parent:'ColumnListItem',bindingContext:path},null,2)},
+{k:'oContext (getBindingContext())',t:'BindingContext → '+path,j:JSON.stringify({path:path,model:'default JSONModel',methods:['getObject()','getProperty()','getPath()']},null,2)},
+{k:'sPath (getPath())',t:'Location string',j:'"'+path+'"'},
+{k:'oProduct (getObject())',t:'Real business data',j:JSON.stringify(p,null,2)},
+{k:'sTitle (getProperty("title"))',t:'Single field',j:'"'+p.title+'"'}];
+var vd=document.getElementById('dbgVars');vd.innerHTML='';
+vars.forEach(function(v,i){var d=document.createElement('div');d.className='dbgVar';d.innerHTML='<b>'+v.k+'</b><br><small style="color:var(--muted)">'+v.t+'</small>';d.onclick=function(){vd.querySelectorAll('.dbgVar').forEach(function(x){x.classList.remove('active')});d.classList.add('active');document.getElementById('dbgInspect').innerHTML='<b>'+v.k+'</b><br><small>'+v.t+'</small><pre>'+v.j+'</pre>'};vd.appendChild(d)});
+document.getElementById('dbgInspect').innerHTML='✅ <b>View clicked on row '+(idx+1)+'.</b><br>Chain: Button → <span class="kbd">'+path+'</span> → '+p.title+'. Click a variable on the left.';
+}
+// scrollspy
+var links=document.querySelectorAll('#sidebar a');
+window.addEventListener('scroll',function(){var cur=null;document.querySelectorAll('main section').forEach(function(s){if(window.scrollY>=s.offsetTop-120)cur=s.id});links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur)})});
+</script>
+</body>
+</html>
