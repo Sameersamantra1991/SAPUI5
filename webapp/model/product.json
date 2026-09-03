@@ -11,6 +11,54 @@
       "title": "Mobile",
       "price": 20000,
       "category": "Electronics"
+    },
+    {
+      "id": 3,
+      "title": "Headphones",
+      "price": 2500,
+      "category": "Accessories"
+    },
+    {
+      "id": 4,
+      "title": "Smart Watch",
+      "price": 7000,
+      "category": "Wearables"
+    },
+    {
+      "id": 5,
+      "title": "Keyboard",
+      "price": 1800,
+      "category": "Accessories"
+    },
+    {
+      "id": 6,
+      "title": "Mouse",
+      "price": 900,
+      "category": "Accessories"
+    },
+    {
+      "id": 7,
+      "title": "Tablet",
+      "price": 30000,
+      "category": "Electronics"
+    },
+    {
+      "id": 8,
+      "title": "Bluetooth Speaker",
+      "price": 3500,
+      "category": "Audio"
+    },
+    {
+      "id": 9,
+      "title": "Monitor",
+      "price": 15000,
+      "category": "Electronics"
+    },
+    {
+      "id": 10,
+      "title": "USB Flash Drive",
+      "price": 800,
+      "category": "Storage"
     }
   ]
 }
