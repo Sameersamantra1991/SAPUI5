@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Masterclass: SAPUI5 Events, Controls, Binding Context & Model Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>try{(function(){var t=localStorage.getItem('ui5mc-theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;})();}catch(e){}</script>
 <style>
 :root{--bg:#0b1220;--bg2:#0f172a;--panel:#111c33;--panel2:#16233f;--border:#24365a;--text:#e2e8f0;--muted:#94a3b8;--accent:#38bdf8;--accent2:#a78bfa;--green:#22c55e;--yellow:#facc15;--red:#f87171;--orange:#fb923c;--codebg:#020617}
 *{box-sizing:border-box}
@@ -178,14 +182,303 @@ summary{color:#7dd3fc}
 @media(max-width:900px){section{padding:20px}section h2{font-size:20px}header h1{font-size:13px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>window.addEventListener('DOMContentLoaded',function(){try{if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:'dark',themeVariables:{darkMode:true}});}else{document.querySelectorAll('.mermaid').forEach(function(el){el.style.textAlign='left';});}}catch(e){}});</script>
+<style>
+/* ===== NEO-MINIMALISM + SOFT GEOMETRICS OVERRIDE ===== */
+:root{
+  --bg:#F6F4EE; --bg2:#FFFFFF; --panel:#FFFFFF; --panel2:#FAF9F6;
+  --border:#E9E3D8; --border2:#E9E3D8;
+  --text:#1C1917; --muted:#8A837B;
+  --accent:#4F46E5; --accent2:#7C7CF4;
+  --green:#15803D; --yellow:#A16207; --red:#BE123C; --orange:#C2410C;
+  --codebg:#FAFAF8; --glow:0 1px 2px rgba(28,25,23,.05),0 12px 32px rgba(28,25,23,.07);
+}
+*::selection{background:#E0E0FF}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"Inter","Plus Jakarta Sans",'Segoe UI',system-ui,-apple-system,sans-serif;
+  letter-spacing:0; line-height:1.7;
+  background-image:
+    radial-gradient(560px 380px at 8% -4%,rgba(196,181,253,.28),transparent 70%),
+    radial-gradient(620px 420px at 96% 2%,rgba(253,186,116,.22),transparent 70%),
+    radial-gradient(700px 480px at 50% 115%,rgba(153,246,228,.25),transparent 70%);
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(rgba(28,25,23,.10) 1.2px,transparent 1.2px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(ellipse 85% 45% at 50% 0%,black 20%,transparent 75%);
+  opacity:.5;
+}
+body::after{
+  content:''; position:fixed; right:-90px; top:140px; width:230px; height:230px;
+  border-radius:64px; transform:rotate(18deg); pointer-events:none; z-index:0;
+  background:linear-gradient(135deg,rgba(79,70,229,.10),rgba(125,211,252,.10));
+  border:1px solid rgba(79,70,229,.14);
+}
+.layout,header,main{position:relative;z-index:1}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#EFECE5}
+::-webkit-scrollbar-thumb{background:#D6D0C2;border-radius:99px;border:2px solid #EFECE5}
+header{
+  height:68px; background:rgba(255,255,255,.82); backdrop-filter:blur(14px) saturate(1.1);
+  border-bottom:1px solid var(--border); box-shadow:none;
+}
+header .logo{
+  width:42px;height:42px;border-radius:16px;font-size:14px;font-weight:800;color:#fff;
+  background:#1C1917; box-shadow:none; position:relative;
+}
+header .logo::after{display:none}
+header h1{
+  font-size:16px;font-weight:750;letter-spacing:-.01em;
+  background:none;-webkit-background-clip:initial;background-clip:initial;-webkit-text-fill-color:currentColor;color:var(--text);
+}
+header .sub{font-size:12px;color:var(--muted);font-family:inherit}
+nav#sidebar{background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-right:1px solid var(--border);padding:18px 14px}
+nav#sidebar input{background:#F5F3ED;border:1px solid var(--border);border-radius:999px;padding:10px 16px;font-size:13px;color:var(--text)}
+nav#sidebar input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.14)}
+nav#sidebar .grp{font-size:11px;letter-spacing:.14em;color:var(--muted);margin:18px 8px 8px;font-weight:700;text-transform:uppercase}
+nav#sidebar .grp::before{content:'';display:inline-block;width:8px;height:8px;border-radius:99px;background:#DDD6FE;margin-right:7px;vertical-align:1px}
+nav#sidebar a{border:1px solid transparent;font-size:13.2px;padding:8px 12px;border-radius:12px;color:#57534E;transition:.15s}
+nav#sidebar a:hover{background:#F5F3ED;color:var(--text);border-color:transparent;transform:none}
+nav#sidebar a.active{background:#1C1917;color:#fff;border-color:#1C1917;box-shadow:none;font-weight:600}
+main{max-width:1120px}
+section{
+  background:var(--panel);border:1px solid var(--border);border-radius:26px;
+  padding:34px;margin:0 0 24px;box-shadow:var(--glow);position:relative;overflow:hidden;animation:fadeUp .4s ease both;
+}
+section::before{display:none}
+section:hover{border-color:#D9D1C2}
+section h2{
+  font-size:23px;font-weight:750;letter-spacing:-.02em;color:var(--text);
+  background:none;-webkit-background-clip:initial;background-clip:initial;-webkit-text-fill-color:currentColor;
+  border-bottom:1px solid var(--border);padding-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+section h2::before{content:'';width:12px;height:12px;border-radius:99px;background:linear-gradient(135deg,#4F46E5,#A78BFA);flex-shrink:0}
+section h2 code,section h3 code{-webkit-text-fill-color:currentColor;background:#F5F3ED;border-radius:8px;padding:1px 7px}
+section h3{color:var(--text);font-size:16px;margin-top:30px;display:flex;align-items:center;gap:8px;font-weight:700}
+section h3::before{content:'';width:22px;height:8px;border-radius:99px;background:#E7E5FF;flex-shrink:0}
+.badge{font-size:11px;font-weight:650;letter-spacing:.04em;padding:4px 12px;border-radius:999px;text-transform:none;border:1px solid var(--border);background:#F5F3ED;color:#57534E;box-shadow:none}
+.badge.b-blue{background:#EEF2FF;color:#4338CA;border-color:#C7D2FE;box-shadow:none}
+.badge.b-green{background:#ECFDF5;color:#047857;border-color:#A7F3D0}
+.badge.b-purple{background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE}
+.badge.b-yellow{background:#FFFBEB;color:#92400E;border-color:#FDE68A}
+.badge.b-red{background:#FEF2F2;color:#BE123C;border-color:#FECDD3}
+.kbd{background:#fff;border:1px solid var(--border);border-bottom-width:2px;border-radius:8px;padding:1px 8px;color:#4338CA;font-weight:600;box-shadow:none}
+.card{background:#FAF9F6;border:1px solid var(--border);border-radius:20px;transition:.18s;box-shadow:none}
+.card:hover{transform:translateY(-2px);border-color:#D9D1C2;box-shadow:0 8px 22px rgba(28,25,23,.07)}
+.card h4{color:var(--text)}
+.note,.warn,.danger,.ok{border-radius:16px;padding:14px 18px 14px 16px;border:1px solid var(--border);border-left-width:4px;box-shadow:none;background:#FAF9F6}
+.note{background:#F5F3FF;border-color:#DDD6FE;border-left-color:var(--accent)}
+.warn{background:#FFFBEB;border-color:#FDE68A;border-left-color:#D97706}
+.danger{background:#FEF2F2;border-color:#FECDD3;border-left-color:#E11D48}
+.ok{background:#ECFDF5;border-color:#A7F3D0;border-left-color:#059669}
+pre{background:#FCFCFA;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:none;font-size:13.2px}
+pre code{font-family:'Cascadia Code',Consolas,'JetBrains Mono',Menlo,monospace;color:#292524}
+.copyBtn{background:#fff;border:1px solid var(--border);color:#57534E;border-radius:999px;padding:5px 13px;font-weight:650;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.copyBtn:hover{background:#1C1917;color:#fff;border-color:#1C1917;box-shadow:none}
+.tg{color:#0E7490}.at{color:#6D28D9}.st{color:#15803D}.kw{color:#6D28D9}.fn{color:#92400E}.num{color:#C2410C}.cm{color:#A8A29E}
+table{border:1px solid var(--border);border-radius:16px;overflow:hidden;font-size:13.5px;border-collapse:separate;border-spacing:0}
+th{background:#F5F3ED;color:#57534E;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;border-color:var(--border)}
+td,th{border-color:var(--border)}
+td{border-top:1px solid var(--border)}
+tr:nth-child(even) td{background:#FCFBF8}
+tbody tr{transition:.15s}tbody tr:hover td{background:#F5F3FF}
+.fstep{background:#FAF9F6;border:1.5px solid var(--border);border-radius:18px;padding:13px 20px;font-size:14px;box-shadow:none;color:var(--text)}
+.fstep b{color:var(--text)}
+.fstep:hover{border-color:var(--accent);transform:none;box-shadow:none}
+.fstep.active{border-color:var(--accent);background:#EEF2FF;box-shadow:0 0 0 3px rgba(79,70,229,.14)}
+.arrow{color:#A8A29E;font-size:18px;text-shadow:none;margin:4px 0}
+#fstepInfo,.infoBox{background:#F8F7FF;border:1px solid #DDD6FE;border-radius:18px;box-shadow:none;color:var(--text)}
+button.btn{background:#1C1917;border:none;color:#fff;box-shadow:none;border-radius:999px;transition:.18s}
+button.btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(28,25,23,.18);filter:none;background:#292524}
+button.btn.ghost{background:#fff;border:1px solid var(--border);box-shadow:none;color:var(--text);border-radius:999px}
+button.btn.ghost:hover{border-color:var(--text);color:var(--text)}
+.mockTable{border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:none}
+.mockTable .mrow.head{background:#F5F3ED;color:#57534E;text-transform:uppercase;font-size:11.5px;letter-spacing:.06em}
+.mockTable .mrow{background:#fff}
+.mockTable .mrow:not(.head):hover{background:#F5F3FF}
+.miniBtn{font-weight:650;border-radius:999px;background:#fff;transition:.15s}
+.miniBtn:hover{transform:translateY(-1px)}
+.miniBtn.view{background:#EEF2FF;border-color:#C7D2FE;color:#4338CA}
+.miniBtn.edit{background:#FFFBEB;border-color:#FDE68A;color:#92400E}
+.miniBtn.del{background:#FEF2F2;border-color:#FECDD3;color:#BE123C}
+.dbgVar{background:#fff;border:1px solid var(--border);border-radius:14px;transition:.15s}
+.dbgVar:hover{border-color:var(--accent)}
+.dbgVar.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.14)}
+.quiz{background:#FAF9F6;border:1px solid var(--border);border-radius:18px;box-shadow:none}
+.quiz button{background:#fff;transition:.15s}
+.quiz button:hover{border-color:var(--accent);transform:none;background:#F5F3FF}
+.treeQ{background:#FAF9F6;border:1px solid #DDD6FE;border-radius:18px;box-shadow:none}
+details{transition:.2s;background:#FAF9F6}details[open]{border-color:var(--accent);box-shadow:none}
+summary{color:var(--text)}
+.mermaid{background:#FCFCFA;border:1px solid var(--border);box-shadow:none;border-radius:18px}
+.printArea{border:2px dashed #C7D2FE;box-shadow:none;background:#fff;border-radius:20px}
+.lvl{transition:.15s;background:#FAF9F6}.lvl:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 18px rgba(28,25,23,.07)}
+.levels .lvl b{color:var(--text)}
+#menuBtn{background:#fff;border:1px solid var(--border);color:var(--text);font-weight:700;border-radius:999px}
+/* SVG illustrations → soft light */
+.tableSvg{background:#FCFBF8;border:1px solid var(--border);border-radius:18px}
+.tableSvg rect[fill="#020617"]{fill:#FCFBF8}
+.tableSvg rect[fill="#1e293b"]{fill:#EDE9FE}
+.tableSvg rect[fill="#0f172a"]{fill:#FFFFFF}
+.tableSvg rect[fill="#0c2540"]{fill:#EEF2FF}
+.tableSvg text[fill="#7dd3fc"]{fill:#4F46E5}
+.tableSvg text[fill="#e2e8f0"]{fill:#1C1917}
+.tableSvg text[fill="#86efac"]{fill:#047857}
+.tableSvg text[fill="#94a3b8"]{fill:#8A837B}
+.tableSvg text[fill="#64748b"]{fill:#8A837B}
+.tableSvg rect[stroke="#24365a"]{stroke:#E9E3D8}
+.tableSvg rect[stroke="#22c55e"]{stroke:#059669}
+.tableSvg rect[stroke="#38bdf8"]{stroke:#4F46E5}
+.hero{
+  background:#FFFFFF;border:1px solid var(--border);border-radius:28px;padding:34px;position:relative;overflow:hidden;box-shadow:var(--glow);
+}
+.hero::after{content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:60px;transform:rotate(20deg);background:linear-gradient(135deg,#EDE9FE,#FEF3C7);opacity:.7;pointer-events:none}
+.gapTag{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;border-radius:999px}
+a{color:var(--accent)}
+figcaption{color:var(--muted)}
+figure{margin:14px 0}
+/* ===== FONT SYSTEM (Neo-Minimalism) ===== */
+:root{
+  --font-display:"Sora","Plus Jakarta Sans",Inter,'Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-body:"Plus Jakarta Sans",Inter,'Segoe UI',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono","Cascadia Code",Consolas,'SF Mono',Menlo,monospace;
+}
+html{color-scheme:light}
+body{font-family:var(--font-body);font-size:15.5px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+header h1,section h2,section h3,.card h4,.lvl b,summary,.fstep b{font-family:var(--font-display)}
+header h1{font-weight:700;letter-spacing:-.015em}
+section h2{font-weight:700;letter-spacing:-.025em;line-height:1.25}
+section h3{font-weight:600;letter-spacing:-.01em}
+pre,code,.kbd,pre code{font-family:var(--font-mono)}
+pre code{font-size:13px;line-height:1.7}
+code{font-size:.88em}
+nav#sidebar a{font-family:var(--font-body);font-weight:500}
+nav#sidebar .grp{font-family:var(--font-display)}
+.badge,.copyBtn,button.btn,.miniBtn,.treeQ .opts{font-family:var(--font-body)}
+/* Theme toggle button */
+#themeToggle{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:.18s;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+#themeToggle:hover{border-color:var(--text);transform:translateY(-1px)}
+#themeToggle .dot{width:9px;height:9px;border-radius:99px;background:#F59E0B;flex-shrink:0}
+/* ===== DARK MODE — soft charcoal geometrics ===== */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="dark"]:root{
+  --bg:#141311; --bg2:#1B1A17; --panel:#1E1C18; --panel2:#24211D;
+  --border:#35312B; --border2:#35312B;
+  --text:#F2EFE9; --muted:#A8A29A;
+  --accent:#A5B4FC; --accent2:#8B8BF4;
+  --green:#6EE7B7; --yellow:#FCD34D; --red:#FDA4AF; --orange:#FDBA74;
+  --codebg:#191817; --glow:0 1px 2px rgba(0,0,0,.4),0 16px 40px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] body{
+  background:var(--bg);color:var(--text);
+  background-image:
+    radial-gradient(560px 380px at 8% -4%,rgba(99,102,241,.20),transparent 70%),
+    radial-gradient(620px 420px at 96% 2%,rgba(217,119,6,.12),transparent 70%),
+    radial-gradient(700px 480px at 50% 115%,rgba(45,212,191,.08),transparent 70%);
+}
+html[data-theme="dark"] body::before{background-image:radial-gradient(rgba(255,255,255,.07) 1.2px,transparent 1.2px);opacity:.4}
+html[data-theme="dark"] body::after{background:linear-gradient(135deg,rgba(99,102,241,.16),rgba(45,212,191,.10));border-color:rgba(165,180,252,.18)}
+html[data-theme="dark"] ::-webkit-scrollbar-track{background:#1B1A17}
+html[data-theme="dark"] ::-webkit-scrollbar-thumb{background:#44403C;border-color:#1B1A17}
+html[data-theme="dark"] header{background:rgba(27,26,23,.85);border-bottom-color:var(--border)}
+html[data-theme="dark"] header .logo{background:#F2EFE9;color:#141311}
+html[data-theme="dark"] header h1{color:var(--text)}
+html[data-theme="dark"] nav#sidebar{background:rgba(27,26,23,.94);border-right-color:var(--border)}
+html[data-theme="dark"] nav#sidebar input{background:#24211D;border-color:var(--border);color:var(--text)}
+html[data-theme="dark"] nav#sidebar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(165,180,252,.18)}
+html[data-theme="dark"] nav#sidebar a{color:#B8B2A8}
+html[data-theme="dark"] nav#sidebar a:hover{background:#24211D;color:#fff}
+html[data-theme="dark"] nav#sidebar a.active{background:#F2EFE9;color:#141311;border-color:#F2EFE9}
+html[data-theme="dark"] section{background:var(--panel);border-color:var(--border)}
+html[data-theme="dark"] section:hover{border-color:#4A453D}
+html[data-theme="dark"] section h2,html[data-theme="dark"] section h3,html[data-theme="dark"] .card h4,html[data-theme="dark"] .levels .lvl b{color:var(--text)}
+html[data-theme="dark"] section h2::before{background:linear-gradient(135deg,#A5B4FC,#6D28D9)}
+html[data-theme="dark"] section h3::before{background:#3B3F6B}
+html[data-theme="dark"] section h2 code,html[data-theme="dark"] section h3 code{background:#2A2723}
+html[data-theme="dark"] .badge{background:#24211D;border-color:var(--border);color:#B8B2A8}
+html[data-theme="dark"] .badge.b-blue{background:rgba(99,102,241,.16);color:#C7D2FE;border-color:#4C4FA3}
+html[data-theme="dark"] .badge.b-green{background:rgba(16,122,87,.18);color:#6EE7B7;border-color:#166B4D}
+html[data-theme="dark"] .badge.b-purple{background:rgba(139,92,246,.16);color:#DDD6FE;border-color:#5B4BA3}
+html[data-theme="dark"] .badge.b-yellow{background:rgba(217,119,6,.16);color:#FCD34D;border-color:#8A5A18}
+html[data-theme="dark"] .badge.b-red{background:rgba(225,29,72,.16);color:#FDA4AF;border-color:#8A2B3D}
+html[data-theme="dark"] .kbd{background:#24211D;border-color:var(--border);color:#C7D2FE}
+html[data-theme="dark"] .card{background:#22201C;border-color:var(--border)}
+html[data-theme="dark"] .card:hover{border-color:#4A453D;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+html[data-theme="dark"] .note,html[data-theme="dark"] .warn,html[data-theme="dark"] .danger,html[data-theme="dark"] .ok{background:#22201C;border-color:var(--border)}
+html[data-theme="dark"] .note{background:rgba(99,102,241,.10);border-color:#4C4FA3;border-left-color:#A5B4FC}
+html[data-theme="dark"] .warn{background:rgba(217,119,6,.10);border-color:#8A5A18;border-left-color:#F59E0B}
+html[data-theme="dark"] .danger{background:rgba(225,29,72,.10);border-color:#8A2B3D;border-left-color:#FB7185}
+html[data-theme="dark"] .ok{background:rgba(16,122,87,.12);border-color:#166B4D;border-left-color:#34D399}
+html[data-theme="dark"] pre{background:#191817;border-color:var(--border)}
+html[data-theme="dark"] pre code{color:#E7E5E0}
+html[data-theme="dark"] .copyBtn{background:#24211D;border-color:var(--border);color:#D6D0C6}
+html[data-theme="dark"] .copyBtn:hover{background:#F2EFE9;color:#141311;border-color:#F2EFE9}
+html[data-theme="dark"] .tg{color:#67E8F9}html[data-theme="dark"] .at{color:#C4B5FD}html[data-theme="dark"] .st{color:#6EE7B7}html[data-theme="dark"] .kw{color:#C4B5FD}html[data-theme="dark"] .fn{color:#FCD34D}html[data-theme="dark"] .num{color:#FDBA74}html[data-theme="dark"] .cm{color:#78716C}
+html[data-theme="dark"] th{background:#24211D;color:#B8B2A8}
+html[data-theme="dark"] tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+html[data-theme="dark"] tbody tr:hover td{background:rgba(99,102,241,.10)}
+html[data-theme="dark"] .fstep{background:#22201C;border-color:var(--border);color:var(--text)}
+html[data-theme="dark"] .fstep b{color:var(--text)}
+html[data-theme="dark"] .fstep.active{border-color:var(--accent);background:rgba(99,102,241,.14);box-shadow:0 0 0 3px rgba(165,180,252,.18)}
+html[data-theme="dark"] .arrow{color:#57534E}
+html[data-theme="dark"] #fstepInfo,html[data-theme="dark"] .infoBox{background:#22233A;border-color:#4C4FA3;color:var(--text)}
+html[data-theme="dark"] button.btn{background:#F2EFE9;color:#141311}
+html[data-theme="dark"] button.btn:hover{background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+html[data-theme="dark"] button.btn.ghost{background:#24211D;border-color:var(--border);color:var(--text)}
+html[data-theme="dark"] button.btn.ghost:hover{border-color:#F2EFE9}
+html[data-theme="dark"] #themeToggle{background:#24211D;border-color:var(--border);color:var(--text)}
+html[data-theme="dark"] #themeToggle .dot{background:#A5B4FC}
+html[data-theme="dark"] .mockTable{border-color:var(--border)}
+html[data-theme="dark"] .mockTable .mrow.head{background:#24211D;color:#B8B2A8}
+html[data-theme="dark"] .mockTable .mrow{background:#1E1C18}
+html[data-theme="dark"] .mockTable .mrow:not(.head):hover{background:#26232A}
+html[data-theme="dark"] .miniBtn{background:#24211D}
+html[data-theme="dark"] .miniBtn.view{background:rgba(99,102,241,.16);border-color:#4C4FA3;color:#C7D2FE}
+html[data-theme="dark"] .miniBtn.edit{background:rgba(217,119,6,.14);border-color:#8A5A18;color:#FCD34D}
+html[data-theme="dark"] .miniBtn.del{background:rgba(225,29,72,.14);border-color:#8A2B3D;color:#FDA4AF}
+html[data-theme="dark"] .dbgVar{background:#191817;border-color:var(--border)}
+html[data-theme="dark"] .dbgVar.active{border-color:#34D399}
+html[data-theme="dark"] .quiz{background:#22201C;border-color:var(--border)}
+html[data-theme="dark"] .quiz button{background:#1E1C18;border-color:var(--border);color:var(--text)}
+html[data-theme="dark"] .quiz button:hover{border-color:var(--accent);background:rgba(99,102,241,.10)}
+html[data-theme="dark"] .treeQ{background:#22201C;border-color:#4C4FA3}
+html[data-theme="dark"] details{background:#22201C}html[data-theme="dark"] details[open]{border-color:var(--accent)}
+html[data-theme="dark"] summary{color:var(--text)}
+html[data-theme="dark"] .mermaid{background:#191817;border-color:var(--border)}
+html[data-theme="dark"] .printArea{background:#1E1C18;border-color:#4C4FA3}
+html[data-theme="dark"] .lvl{background:#22201C}
+html[data-theme="dark"] .hero{background:#1E1C18;border-color:var(--border)}
+html[data-theme="dark"] .hero::after{background:linear-gradient(135deg,rgba(99,102,241,.25),rgba(217,119,6,.15));opacity:.5}
+html[data-theme="dark"] .gapTag{background:rgba(217,119,6,.14);border-color:#8A5A18;color:#FCD34D}
+html[data-theme="dark"] .tableSvg{background:#1E1C18;border-color:var(--border)}
+html[data-theme="dark"] .tableSvg rect[fill="#020617"]{fill:#1E1C18}
+html[data-theme="dark"] .tableSvg rect[fill="#1e293b"]{fill:#2E2B45}
+html[data-theme="dark"] .tableSvg rect[fill="#0f172a"]{fill:#24211D}
+html[data-theme="dark"] .tableSvg rect[fill="#0c2540"]{fill:#26263A}
+html[data-theme="dark"] .tableSvg rect[fill="#FCFBF8"]{fill:#1E1C18}
+html[data-theme="dark"] .tableSvg rect[fill="#FFFFFF"]{fill:#24211D}
+html[data-theme="dark"] .tableSvg rect[fill="#EEF2FF"]{fill:#26263A}
+html[data-theme="dark"] .tableSvg rect[fill="#EDE9FE"]{fill:#2E2B45}
+html[data-theme="dark"] .tableSvg rect[stroke="#24365a"],html[data-theme="dark"] .tableSvg rect[stroke="#E9E3D8"]{stroke:#44403C}
+html[data-theme="dark"] .tableSvg text[fill="#e2e8f0"],html[data-theme="dark"] .tableSvg text[fill="#1C1917"]{fill:#F2EFE9}
+html[data-theme="dark"] .tableSvg text[fill="#7dd3fc"],html[data-theme="dark"] .tableSvg text[fill="#4F46E5"]{fill:#A5B4FC}
+html[data-theme="dark"] .tableSvg text[fill="#86efac"],html[data-theme="dark"] .tableSvg text[fill="#047857"]{fill:#6EE7B7}
+html[data-theme="dark"] .tableSvg text[fill="#94a3b8"],html[data-theme="dark"] .tableSvg text[fill="#64748b"],html[data-theme="dark"] .tableSvg text[fill="#8A837B"]{fill:#A8A29A}
+html[data-theme="dark"] a{color:var(--accent)}
+@media(max-width:900px){section{padding:22px}section h2{font-size:19px}header h1{font-size:13px}}
+@media print{header,nav#sidebar,#menuBtn,.copyBtn,.noPrint{display:none!important}body{background:#fff}section{box-shadow:none;break-inside:avoid}}
+</style>
+<script>function currentTheme(){return document.documentElement.getAttribute('data-theme')||'light'}function applyThemeLabel(){var l=document.getElementById('themeLabel');if(l)l.textContent=currentTheme()==='dark'?'Light':'Dark'}function toggleTheme(){var next=currentTheme()==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);document.documentElement.style.colorScheme=next;try{localStorage.setItem('ui5mc-theme',next)}catch(e){}applyThemeLabel();refreshMermaidTheme()}function refreshMermaidTheme(){try{if(window.mermaid){var dark=currentTheme()==='dark';mermaid.initialize({startOnLoad:false,theme:dark?'dark':'neutral',themeVariables:dark?{darkMode:true,background:'#191817',primaryColor:'#26263A',primaryTextColor:'#F2EFE9',lineColor:'#A5B4FC'}:{}});var nodes=document.querySelectorAll('.mermaid');if(nodes.length&&window.__mermaidSrc){nodes.forEach(function(el,i){if(window.__mermaidSrc[i]){el.removeAttribute('data-processed');el.textContent=window.__mermaidSrc[i]}});mermaid.run({nodes:nodes})}}}catch(e){}}window.addEventListener('DOMContentLoaded',function(){applyThemeLabel();try{if(window.mermaid){var dark0=currentTheme()==='dark';window.__mermaidSrc=[];document.querySelectorAll('.mermaid').forEach(function(el){window.__mermaidSrc.push(el.textContent)});mermaid.initialize({startOnLoad:true,theme:dark0?'dark':'neutral',themeVariables:dark0?{darkMode:true,background:'#191817',primaryColor:'#26263A',primaryTextColor:'#F2EFE9',lineColor:'#A5B4FC'}:{}});}else{document.querySelectorAll('.mermaid').forEach(function(el){el.style.textAlign='left';});}}catch(e){}});</script>
 </head>
 <body>
 <header>
 <button id="menuBtn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ Menu</button>
 <div class="logo">UI5</div>
 <div style="flex:1;min-width:0"><h1>Masterclass: SAPUI5 Events, Controls, Binding Context &amp; Model Data</h1><div class="sub">oEvent • getSource • getBindingContext • getObject • Models • Tables • Dialogs • CRUD</div></div>
-<div class="noPrint" style="display:flex;gap:8px;align-items:center;flex-shrink:0"><span class="badge b-green" style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;display:inline-block"></span>OFFLINE READY</span><span class="badge b-blue">v2.0</span></div>
+<div class="noPrint" style="display:flex;gap:8px;align-items:center;flex-shrink:0"><button id="themeToggle" onclick="toggleTheme()" title="Toggle light / dark mode" aria-label="Toggle dark mode"><span class="dot"></span><span id="themeLabel">Dark</span></button><span class="badge b-green" style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;display:inline-block"></span>OFFLINE READY</span><span class="badge b-blue">v2.0</span></div>
 </header>
 <div class="layout">
 <nav id="sidebar">
@@ -216,6 +509,13 @@ summary{color:#7dd3fc}
 <a href="#s-delete">19. Delete Scenario</a>
 <a href="#s-edit">20. Edit + Dialog Scenario</a>
 <a href="#s-viewnav">21. View / Detail + Navigation</a>
+<a href="#s-outside">21A. ⭐ INSIDE vs OUTSIDE (big idea)</a>
+<a href="#s-single">21B. View button OUTSIDE (single select)</a>
+<a href="#s-multisel">21C. Buttons OUTSIDE + multi-select</a>
+<a href="#s-noselect">21D. No-selection guard (null safety)</a>
+<a href="#s-toolbar-out">21E. Toolbar buttons (Add/Search/Refresh)</a>
+<a href="#s-footer">21F. Footer buttons (Total/Submit all rows)</a>
+<a href="#s-select-vs-press">21G. selectionChange vs press + live demo</a>
 <a href="#s-dialog">22. Dialog setBindingContext</a>
 <a href="#s-form">23. Form + bindElement</a>
 <a href="#s-named">24. Named Models</a>
@@ -531,6 +831,228 @@ Table
   oRouter.<span class="fn">navTo</span>(<span class="st">"detail"</span>, { <span class="at">productPath</span>: <span class="fn">encodeURIComponent</span>(sPath) });
 }</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
 <div class="flow"><div class="fstep">View</div><div class="arrow">↓</div><div class="fstep">Context → ID / Path</div><div class="arrow">↓</div><div class="fstep">navTo detail</div><div class="arrow">↓</div><div class="fstep">Detail page bindElement(path)</div></div>
+<div class="warn"><b>Scope:</b> this exact code only works when the View button is <b>INSIDE the row</b> (inherits <span class="kbd">/Products/1</span>). If your View button is <b>OUTSIDE / above / below the table</b>, <span class="kbd">getSource().getBindingContext()</span> returns <span class="kbd">null</span> — jump to <a href="#s-outside">§21A–21G</a>.</div>
+</section>
+
+<section id="s-outside"><h2>21A. ⭐ INSIDE vs OUTSIDE — the one big idea</h2>
+<span class="badge b-red">MOST IMPORTANT NEW CONCEPT</span> <span class="badge b-blue">READ THIS FIRST</span>
+<div class="grid2"><div class="card"><h4>✅ Button INSIDE row (cells)</h4><p>Row = <span class="kbd">ColumnListItem</span> with context <span class="kbd">/Products/1</span> → Button <b>inherits</b> it.<br><span class="kbd">oEvent.getSource().getBindingContext()</span> ✅ works.</p><pre><code><span class="tg">&lt;Table</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;ColumnListItem&gt;</span>
+    <span class="tg">&lt;cells&gt;</span>
+      <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span>
+      <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View"</span> <span class="at">press</span>=<span class="st">".onViewProduct"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;/cells&gt;</span>
+  <span class="tg">&lt;/ColumnListItem&gt;</span>
+<span class="tg">&lt;/Table&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre></div><div class="card"><h4>⛔ Button OUTSIDE table (toolbar / header / footer)</h4><p>Button lives in <span class="kbd">Toolbar / VBox / Page footer</span> — <b>no row above it</b> → NO inherited context.<br><span class="kbd">oEvent.getSource().getBindingContext()</span> → <span class="kbd">null</span> ❌</p><pre><code><span class="tg">&lt;VBox&gt;</span>
+  <span class="tg">&lt;Toolbar&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View Selected"</span> <span class="at">press</span>=<span class="st">".onViewOutside"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;/Toolbar&gt;</span>
+  <span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;/VBox&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre></div></div>
+<div class="danger"><b>Golden rule:</b> INSIDE → ask the <b>button</b> for context (<span class="kbd">getSource().getBindingContext()</span>). OUTSIDE → ask the <b>table</b> for selection (<span class="kbd">this.byId("productsTable").getSelectedItem()</span>). Mixing them = <span class="kbd">null.getObject() → TypeError</span>.</div>
+<table><tr><th>Question</th><th>Button INSIDE row</th><th>Button OUTSIDE table</th></tr>
+<tr><td>Where is context?</td><td>On the button itself (inherited)</td><td>On the table's <b>selected row(s)</b> only</td></tr>
+<tr><td>Get data how?</td><td><span class="kbd">oEvent.getSource().getBindingContext().getObject()</span></td><td><span class="kbd">this.byId("tbl").getSelectedItem().getBindingContext().getObject()</span></td></tr>
+<tr><td>If nothing clicked/selected?</td><td>Impossible — click implies a row</td><td><span class="kbd">getSelectedItem() === null</span> → must guard!</td></tr>
+<tr><td>Table <span class="kbd">mode</span> needed?</td><td>No (<span class="kbd">mode="None"</span> is fine)</td><td>Yes — <span class="kbd">SingleSelect / SingleSelectMaster / MultiSelect</span></td></tr>
+<tr><td>Multi-row action?</td><td>One row at a time</td><td><span class="kbd">getSelectedItems() / getSelectedContexts()</span> loop</td></tr></table>
+<div class="note"><b>Memory hook:</b> INSIDE = <i>"Who clicked ME?"</i> → <span class="kbd">getSource</span>. OUTSIDE = <i>"What is SELECTED in the TABLE?"</i> → <span class="kbd">byId + getSelectedItem</span>.</div>
+<figure>
+<svg class="tableSvg" viewBox="0 0 720 250" role="img" aria-label="Inside vs outside context diagram">
+<rect x="8" y="8" width="704" height="234" rx="12" fill="#020617" stroke="#24365a"/>
+<text x="24" y="36" fill="#86efac" font-size="13" font-weight="bold">INSIDE ✅ — Button inherits /Products/1 from its row</text>
+<rect x="24" y="46" width="320" height="70" rx="6" fill="#0f172a" stroke="#22c55e"/><text x="36" y="68" fill="#e2e8f0" font-size="12">ColumnListItem  /Products/1</text><text x="36" y="88" fill="#7dd3fc" font-size="12">[View] ← getSource().getBindingContext() ✅</text><text x="36" y="106" fill="#64748b" font-size="11">context flows DOWN to children</text>
+<text x="376" y="36" fill="#fca5a5" font-size="13" font-weight="bold">OUTSIDE ❌ — Toolbar button has NO context</text>
+<rect x="376" y="46" width="320" height="70" rx="6" fill="#0f172a" stroke="#f87171"/><text x="388" y="68" fill="#e2e8f0" font-size="12">Toolbar [View Selected]  ctx = null ❌</text><text x="388" y="88" fill="#fde047" font-size="12">Table.getSelectedItem() → row ✅</text><text x="388" y="106" fill="#64748b" font-size="11">must ask TABLE, not button</text>
+<rect x="24" y="130" width="672" height="44" rx="6" fill="#0c2540" stroke="#38bdf8"/><text x="36" y="157" fill="#e2e8f0" font-size="12">Fix: const oItem = this.byId("productsTable").getSelectedItem();  oItem.getBindingContext().getObject();</text>
+<text x="24" y="200" fill="#94a3b8" font-size="12">Table needs mode="SingleSelectMaster" or "MultiSelect" for selection to exist.</text>
+<text x="24" y="220" fill="#94a3b8" font-size="12">Always null-check: if (!oItem) → MessageToast "Select a row first".</text>
+</svg>
+<figcaption>Fig 3B — Inside inherits context; outside must query table selection.</figcaption>
+</figure>
+</section>
+
+<section id="s-single"><h2>21B. View / Edit / Delete button OUTSIDE table (single select)</h2>
+<span class="badge b-yellow">MOST COMMON REAL APP</span>
+<p>The standard Fiori pattern: table with <span class="kbd">mode="SingleSelectMaster"</span> + View/Edit/Delete buttons in a toolbar <b>above</b> or footer <b>below</b> the table.</p>
+<pre><code><span class="tg">&lt;VBox&gt;</span>
+  <span class="tg">&lt;Toolbar&gt;</span>
+    <span class="tg">&lt;Title</span> <span class="at">text</span>=<span class="st">"Products"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;ToolbarSpacer/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"View"</span> <span class="at">press</span>=<span class="st">".onViewOutside"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://edit"</span> <span class="at">press</span>=<span class="st">".onEditOutside"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://delete"</span> <span class="at">press</span>=<span class="st">".onDeleteOutside"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;/Toolbar&gt;</span>
+  <span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span> <span class="at">mode</span>=<span class="st">"SingleSelectMaster"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;columns&gt;</span>... ID / Title / Price ...<span class="tg">&lt;/columns&gt;</span>
+    <span class="tg">&lt;items&gt;</span><span class="tg">&lt;ColumnListItem&gt;</span><span class="tg">&lt;cells&gt;</span>
+      <span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{id}"</span><span class="tg">/&gt;</span><span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{title}"</span><span class="tg">/&gt;</span><span class="tg">&lt;Text</span> <span class="at">text</span>=<span class="st">"{price}"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;/cells&gt;</span><span class="tg">&lt;/ColumnListItem&gt;</span><span class="tg">&lt;/items&gt;</span>
+  <span class="tg">&lt;/Table&gt;</span>
+<span class="tg">&lt;/VBox&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onViewOutside</span>: <span class="kw">function</span> (oEvent) {
+  <span class="cm">// 1. OUTSIDE button → NO row context. Ignore oEvent.getSource() for data!</span>
+  <span class="kw">const</span> oTable = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>);
+  <span class="kw">const</span> oItem = oTable.<span class="fn">getSelectedItem</span>(); <span class="cm">// ColumnListItem or null</span>
+  <span class="kw">if</span> (!oItem) {
+    <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Select a row first"</span>);
+    <span class="kw">return</span>;
+  }
+  <span class="kw">const</span> oContext = oItem.<span class="fn">getBindingContext</span>();
+  <span class="kw">const</span> oProduct = oContext.<span class="fn">getObject</span>();
+  <span class="fn">MessageBox</span>.<span class="fn">show</span>(oProduct.title + <span class="st">" – "</span> + oProduct.price);
+},
+<span class="fn">onDeleteOutside</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oTable = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>);
+  <span class="kw">const</span> oItem = oTable.<span class="fn">getSelectedItem</span>();
+  <span class="kw">if</span> (!oItem) { <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Select a row to delete"</span>); <span class="kw">return</span>; }
+  <span class="kw">const</span> sPath = oItem.<span class="fn">getBindingContext</span>().<span class="fn">getPath</span>(); <span class="cm">// "/Products/1"</span>
+  <span class="cm">// → remove entry at sPath from JSONModel / call OData remove(sPath)</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid2"><div class="card"><h4>✅ Correct chain (outside)</h4><p><span class="kbd">this.byId("tbl")</span> → <span class="kbd">getSelectedItem()</span> → <span class="kbd">getBindingContext()</span> → <span class="kbd">getObject()/getPath()</span></p></div><div class="card"><h4>⛔ Wrong (outside)</h4><p><span class="kbd">oEvent.getSource().getBindingContext()</span> → <span class="kbd">null</span> → <span class="kbd">null.getObject() crashes</span>. Source is the toolbar button, not a row.</p></div></div>
+<div class="warn"><b>mode matters:</b> without <span class="kbd">mode="SingleSelectMaster"</span> (or <span class="kbd">SingleSelect / MultiSelect</span>) the table has no selection and <span class="kbd">getSelectedItem()</span> doesn't exist / always returns null. Default <span class="kbd">mode="None"</span> = no selection possible.</div>
+<div class="ok"><b>Navigation with outside button:</b> identical after you have the path — <span class="kbd">oRouter.navTo("detail", {productPath: encodeURIComponent(sPath)})</span>. Only the <i>first two lines</i> differ (table lookup vs source).</div>
+</section>
+
+<section id="s-multisel"><h2>21C. Buttons OUTSIDE + multi-select (bulk actions)</h2>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span> <span class="at">mode</span>=<span class="st">"MultiSelect"</span><span class="tg">&gt;</span> ... <span class="tg">&lt;/Table&gt;</span>
+<span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Delete Selected"</span> <span class="at">press</span>=<span class="st">".onBulkDelete"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Export Selected"</span> <span class="at">press</span>=<span class="st">".onBulkExport"</span><span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onBulkDelete</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oTable = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>);
+  <span class="kw">const</span> aItems = oTable.<span class="fn">getSelectedItems</span>(); <span class="cm">// array of ColumnListItem</span>
+  <span class="kw">if</span> (!aItems.length) { <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Select at least one row"</span>); <span class="kw">return</span>; }
+  <span class="kw">const</span> aProducts = aItems.<span class="fn">map</span>(<span class="kw">function</span>(oItem){
+    <span class="kw">return</span> oItem.<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+  });
+  <span class="kw">const</span> aPaths = aItems.<span class="fn">map</span>(<span class="kw">function</span>(oItem){
+    <span class="kw">return</span> oItem.<span class="fn">getBindingContext</span>().<span class="fn">getPath</span>();
+  });
+  <span class="cm">// aProducts → [{id:2,...},{id:3,...}]  aPaths → ["/Products/1","/Products/2"]</span>
+},
+<span class="cm">// Shortcut: contexts directly (no items needed)</span>
+<span class="fn">onBulkExport</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> aContexts = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getSelectedContexts</span>();
+  <span class="kw">const</span> aData = aContexts.<span class="fn">map</span>(<span class="kw">function</span>(oCtx){ <span class="kw">return</span> oCtx.<span class="fn">getObject</span>(); });
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th>API (table)</th><th>Returns</th><th>Use when</th></tr>
+<tr><td><span class="kbd">getSelectedItem()</span></td><td>One <span class="kbd">ColumnListItem</span> or <span class="kbd">null</span></td><td>SingleSelect + outside View/Edit/Delete</td></tr>
+<tr><td><span class="kbd">getSelectedItems()</span></td><td>Array of items (<span class="kbd">[]</span> if none)</td><td>MultiSelect bulk actions</td></tr>
+<tr><td><span class="kbd">getSelectedContexts() / getSelectedContextPaths()</span></td><td>Contexts / path strings</td><td>Shortcut — skip item step</td></tr>
+<tr><td><span class="kbd">getItems()</span></td><td><b>All</b> rows (selected or not)</td><td>Footer Total / Export-all (see §21F)</td></tr></table>
+<div class="warn"><b>Delete in reverse:</b> when removing multiple JSONModel entries by index, loop paths <b>from last to first</b> or indices shift. For OData, call <span class="kbd">remove(sPath)</span> per context.</div>
+</section>
+
+<section id="s-noselect"><h2>21D. No-selection guard — the crash every beginner hits</h2>
+<div class="danger"><b>Crash:</b> <span class="kbd">oItem.getBindingContext()</span> where <span class="kbd">oItem === null</span> → <span class="kbd">TypeError: Cannot read properties of null</span>. Happens when user presses an outside View/Delete button <b>without selecting any row</b>.</div>
+<pre><code><span class="cm">// ❌ CRASHES when nothing selected</span>
+<span class="kw">const</span> oItem = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getSelectedItem</span>();
+<span class="kw">const</span> oProduct = oItem.<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>(); <span class="cm">// 💥 null!</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="cm">// ✅ SAFE pattern (copy-paste this)</span>
+<span class="fn">onViewOutsideSafe</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oItem = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getSelectedItem</span>();
+  <span class="kw">if</span> (!oItem) {
+    <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Please select a product first"</span>);
+    <span class="kw">return</span>; <span class="cm">// stop here</span>
+  }
+  <span class="kw">const</span> oProduct = oItem.<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+  <span class="cm">// ... continue with oProduct</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="grid2"><div class="card"><h4>Bonus UX: disable button until selection</h4><pre><code><span class="tg">&lt;Table</span> <span class="at">selectionChange</span>=<span class="st">".onSelChange"</span> ...<span class="tg">&gt;</span>
+<span class="tg">&lt;Button</span> <span class="at">id</span>=<span class="st">"viewBtn"</span> <span class="at">enabled</span>=<span class="st">"false"</span> ...<span class="tg">/&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre><pre><code><span class="fn">onSelChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> bHas = !!<span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getSelectedItem</span>();
+  <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"viewBtn"</span>).<span class="fn">setEnabled</span>(bHas);
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre></div><div class="card"><h4>Multi-select guard</h4><pre><code><span class="kw">const</span> aItems = oTable.<span class="fn">getSelectedItems</span>();
+<span class="kw">if</span> (!aItems.length) {
+  <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Select at least one row"</span>);
+  <span class="kw">return</span>;
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre><p>Note: <span class="kbd">getSelectedItems()</span> returns <span class="kbd">[]</span> (never null) → check <span class="kbd">.length</span>. <span class="kbd">getSelectedItem()</span> returns <span class="kbd">null</span> → check truthiness.</p></div></div>
+</section>
+
+<section id="s-toolbar-out"><h2>21E. Toolbar buttons that NEVER have context (Add / Search / Refresh)</h2>
+<p>Buttons in <span class="kbd">headerToolbar</span> (<span class="kbd">Add, Search, Refresh, Filter</span>) operate on the <b>whole table/model</b>, not one row. Don't call <span class="kbd">getBindingContext()</span> on them — use <span class="kbd">byId + getModel + binding</span>.</p>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;headerToolbar&gt;</span><span class="tg">&lt;Toolbar&gt;</span>
+    <span class="tg">&lt;SearchField</span> <span class="at">search</span>=<span class="st">".onSearch"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Add"</span> <span class="at">press</span>=<span class="st">".onAdd"</span><span class="tg">/&gt;</span>
+    <span class="tg">&lt;Button</span> <span class="at">icon</span>=<span class="st">"sap-icon://refresh"</span> <span class="at">press</span>=<span class="st">".onRefresh"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;/Toolbar&gt;&lt;/headerToolbar&gt;</span>
+<span class="tg">&lt;/Table&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onAdd</span>: <span class="kw">function</span> (oEvent) {
+  <span class="cm">// No row → work with the MODEL directly</span>
+  <span class="kw">const</span> oModel = <span class="kw">this</span>.<span class="fn">getView</span>().<span class="fn">getModel</span>();
+  <span class="kw">const</span> aProducts = oModel.<span class="fn">getProperty</span>(<span class="st">"/Products"</span>);
+  aProducts.<span class="fn">push</span>({ <span class="at">id</span>: Date.<span class="fn">now</span>(), <span class="at">title</span>: <span class="st">"New"</span>, <span class="at">price</span>: <span class="num">0</span> });
+  oModel.<span class="fn">setProperty</span>(<span class="st">"/Products"</span>, aProducts);
+},
+<span class="fn">onSearch</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> sQ = oEvent.<span class="fn">getParameter</span>(<span class="st">"query"</span>); <span class="cm">// SearchField param, NOT context</span>
+  <span class="kw">const</span> oBinding = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getBinding</span>(<span class="st">"items"</span>);
+  oBinding.<span class="fn">filter</span>([<span class="kw">new</span> <span class="fn">Filter</span>(<span class="st">"title"</span>, <span class="st">"Contains"</span>, sQ)]);
+},
+<span class="fn">onRefresh</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getBinding</span>(<span class="st">"items"</span>).<span class="fn">refresh</span>();
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<div class="note"><b>Pattern:</b> toolbar press → <span class="kbd">oEvent.getSource()</span> is just the toolbar button (useless for data) → switch to <span class="kbd">this.byId("table").getBinding("items")</span> or <span class="kbd">this.getView().getModel()</span>.</div>
+</section>
+
+<section id="s-footer"><h2>21F. Footer / header buttons on ALL rows (Total / Submit / Export-all)</h2>
+<p>Footer buttons (<span class="kbd">Total, Checkout, Submit, Export all</span>) below the table need <b>every row</b>, not the selection. Use <span class="kbd">getItems()</span> or the model array.</p>
+<pre><code><span class="tg">&lt;Table</span> <span class="at">id</span>=<span class="st">"productsTable"</span> <span class="at">items</span>=<span class="st">"{/Products}"</span><span class="tg">&gt;</span> ... <span class="tg">&lt;/Table&gt;</span>
+<span class="tg">&lt;Bar&gt;</span> <span class="cm">&lt;!-- footer --&gt;</span>
+  <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Calculate Total"</span> <span class="at">press</span>=<span class="st">".onTotal"</span><span class="tg">/&gt;</span>
+  <span class="tg">&lt;Button</span> <span class="at">text</span>=<span class="st">"Submit All"</span> <span class="at">press</span>=<span class="st">".onSubmitAll"</span><span class="tg">/&gt;</span>
+<span class="tg">&lt;/Bar&gt;</span></code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<pre><code><span class="fn">onTotal</span>: <span class="kw">function</span> (oEvent) {
+  <span class="cm">// Option A: via table items (respects current filter/sort)</span>
+  <span class="kw">const</span> aItems = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getItems</span>();
+  <span class="kw">let</span> nTotal = <span class="num">0</span>;
+  aItems.<span class="fn">forEach</span>(<span class="kw">function</span>(oItem){
+    nTotal += oItem.<span class="fn">getBindingContext</span>().<span class="fn">getProperty</span>(<span class="st">"price"</span>);
+  });
+  <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Total: "</span> + nTotal);
+  <span class="cm">// Option B: whole model (ignores filter) → getProperty("/Products")</span>
+},
+<span class="fn">onSubmitAll</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> aAll = <span class="kw">this</span>.<span class="fn">getView</span>().<span class="fn">getModel</span>().<span class="fn">getProperty</span>(<span class="st">"/Products"</span>);
+  <span class="cm">// POST aAll to backend</span>
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<table><tr><th>Need</th><th>Use</th><th>Why</th></tr>
+<tr><td>Selected rows only</td><td><span class="kbd">getSelectedItems()</span></td><td>Respects checkboxes</td></tr>
+<tr><td>Visible rows (after filter)</td><td><span class="kbd">getItems()</span></td><td>Matches what user sees</td></tr>
+<tr><td>Every row in model</td><td><span class="kbd">getModel().getProperty("/Products")</span></td><td>Ignores filter/selection</td></tr></table>
+</section>
+
+<section id="s-select-vs-press"><h2>21G. selectionChange vs press + View-outside end-to-end (live demo)</h2>
+<p>Two different events, two different sources. Don't mix them:</p>
+<table><tr><th></th><th><span class="kbd">selectionChange</span> (on Table)</th><th><span class="kbd">press</span> (on outside Button)</th></tr>
+<tr><td>Fires when</td><td>User selects/deselects a row</td><td>User clicks the outside button</td></tr>
+<tr><td><span class="kbd">getSource()</span></td><td>The <b>Table</b></td><td>The <b>Button</b> (no context!)</td></tr>
+<tr><td>Get row how?</td><td><span class="kbd">oEvent.getParameter("listItem")</span></td><td><span class="kbd">this.byId("tbl").getSelectedItem()</span></td></tr>
+<tr><td>Typical job</td><td>Enable/disable buttons, preview detail</td><td>View/Edit/Delete/navigate the selection</td></tr></table>
+<pre><code><span class="fn">onSelChange</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oItem = oEvent.<span class="fn">getParameter</span>(<span class="st">"listItem"</span>); <span class="cm">// the row just selected</span>
+  <span class="kw">const</span> oProduct = oItem && oItem.<span class="fn">getBindingContext</span>().<span class="fn">getObject</span>();
+  <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"viewBtn"</span>).<span class="fn">setEnabled</span>(!!oItem);
+},
+<span class="fn">onViewOutside</span>: <span class="kw">function</span> (oEvent) {
+  <span class="kw">const</span> oItem = <span class="kw">this</span>.<span class="fn">byId</span>(<span class="st">"productsTable"</span>).<span class="fn">getSelectedItem</span>();
+  <span class="kw">if</span> (!oItem) { <span class="fn">MessageToast</span>.<span class="fn">show</span>(<span class="st">"Select a row first"</span>); <span class="kw">return</span>; }
+  <span class="kw">const</span> sPath = oItem.<span class="fn">getBindingContext</span>().<span class="fn">getPath</span>();
+  <span class="kw">this</span>.<span class="fn">getOwnerComponent</span>().<span class="fn">getRouter</span>().<span class="fn">navTo</span>(<span class="st">"detail"</span>, { <span class="at">productPath</span>: <span class="fn">encodeURIComponent</span>(sPath) });
+}</code><button class="copyBtn" onclick="copyCode(this)">Copy</button></pre>
+<h3>🧪 Live demo: buttons OUTSIDE the table</h3>
+<p>Select a row with the radio button, then press an <b>outside</b> button. Open DevTools console / watch the output — same logic as real UI5.</p>
+<div class="mockTable" id="mockTblOutside"></div>
+<div class="noPrint" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+<button class="miniBtn view" onclick="outsideView()">👁 View Selected (outside)</button>
+<button class="miniBtn edit" onclick="outsideEdit()">✏ Edit Selected (outside)</button>
+<button class="miniBtn del" onclick="outsideDelete()">🗑 Delete Selected (outside)</button>
+<button class="miniBtn" onclick="outsideTotal()">∑ Total All</button>
+<button class="btn ghost" onclick="outsideBroken()">💥 Try BROKEN getSource().getBindingContext()</button>
+</div>
+<div id="outsideOut" class="infoBox">Select a row above, then press an outside button.</div>
+<div class="warn"><b>Try this:</b> 1) Press View with nothing selected → guard message. 2) Select Phone → View works. 3) Press <b>BROKEN</b> → shows <span class="kbd">null.getObject()</span> crash — this is what happens when you use the inside-pattern on an outside button.</div>
 </section>
 
 <section id="s-dialog"><h2>22. Dialog: <code>setBindingContext()</code> (no manual copying!)</h2>
@@ -586,7 +1108,7 @@ oDialog.<span class="fn">open</span>();</code><button class="copyBtn" onclick="c
 <div class="note"><span class="kbd">console.log(oProduct)</span> may trigger ESLint <span class="kbd">no-console</span>. That's a lint rule, not a JS error. Use <span class="kbd">// eslint-disable-next-line no-console</span> or prefer <span class="kbd">debugger</span> while learning.</div>
 </section>
 
-<section id="s-mistakes"><h2>28. 10 Common Beginner Mistakes</h2>
+<section id="s-mistakes"><h2>28. 13 Common Beginner Mistakes (incl. OUTSIDE-table crashes)</h2>
 <div id="mistakes"></div>
 </section>
 
@@ -697,6 +1219,9 @@ oDialog.<span class="fn">open</span>();</code><button class="copyBtn" onclick="c
 <tr><td><span class="kbd">getModel([name])</span></td><td>Data container</td><td>Model</td><td><span class="kbd">oC.getModel()</span></td></tr>
 <tr><td><span class="kbd">this.getView().getModel([name])</span></td><td>Model from view (toolbar/add/search, no source)</td><td>Model</td><td><span class="kbd">this.getView().getModel()</span></td></tr>
 <tr><td><span class="kbd">this.byId(id)</span></td><td>Find view control</td><td>Control</td><td><span class="kbd">this.byId("tbl")</span></td></tr>
+<tr><td><span class="kbd">oTable.getSelectedItem()</span></td><td>Selected row (outside single View/Edit/Delete)</td><td>ColumnListItem|null</td><td><span class="kbd">this.byId("tbl").getSelectedItem()</span></td></tr>
+<tr><td><span class="kbd">oTable.getSelectedItems()</span></td><td>Selected rows (outside bulk)</td><td>array</td><td><span class="kbd">getSelectedItems().map(i=>i.getBindingContext().getObject())</span></td></tr>
+<tr><td><span class="kbd">oTable.getItems()</span></td><td>All visible rows (footer Total)</td><td>array</td><td><span class="kbd">getItems().forEach(...getProperty("price"))</span></td></tr>
 <tr><td><span class="kbd">bindElement({path})</span></td><td>Bind view/form to one object</td><td>—</td><td><span class="kbd">bindElement({path:"/Products/1"})</span></td></tr>
 <tr><td><span class="kbd">dialog.setBindingContext(ctx)</span></td><td>Give dialog row context</td><td>—</td><td><span class="kbd">dlg.setBindingContext(oCtx)</span></td></tr></table>
 <div class="noPrint"><button class="btn" onclick="window.print()">🖨️ Print cheat sheet</button></div>
@@ -713,7 +1238,7 @@ oDialog.<span class="fn">open</span>();</code><button class="copyBtn" onclick="c
 </div>
 </section>
 
-<section id="s-quiz"><h2>35. ✍️ Try to Predict — 10 Exercises</h2>
+<section id="s-quiz"><h2>35. ✍️ Try to Predict — 14 Exercises (incl. OUTSIDE table)</h2>
 <p>Click an option, then reveal.</p>
 <div id="quizzes"></div>
 </section>
@@ -786,7 +1311,10 @@ var mistakes=[
 {w:'getBindingContext() returns null with named model {products>...}',why:'Name mismatch.',r:'getBindingContext("products") // must match'},
 {w:'getParameter("value") on a Button press',why:'Params differ per event. Button press has no "value".',r:'Check API: Input/change→value, CheckBox→selected, List→listItem.'},
 {w:'Assuming every event has listItem/selectedItem',why:'Only selection events do.',r:'Read event docs per control.'},
-{w:'this.byId("myBtn") to get clicked row button',why:'byId finds one static control, not which row was clicked.',r:'Use oEvent.getSource() for "which one fired".'}];
+{w:'this.byId("myBtn") to get clicked row button',why:'byId finds one static control, not which row was clicked.',r:'Use oEvent.getSource() for "which one fired".'},
+{w:'oEvent.getSource().getBindingContext() on a TOOLBAR View button → null crash',why:'Outside button has no row above it → context is null.',r:'const oItem = this.byId("productsTable").getSelectedItem(); if(!oItem) return;'},
+{w:'Forgetting mode="SingleSelectMaster" then getSelectedItem() is always null',why:'Default mode="None" has no selection.',r:'Set mode="SingleSelectMaster" (single) or "MultiSelect" (bulk) on Table.'},
+{w:'Using getSelectedItem() on a MultiSelect bulk button (only 1 row handled)',why:'Single API returns only one item.',r:'Use getSelectedItems() / getSelectedContexts() + loop.'}];
 var mDiv=document.getElementById('mistakes');
 mistakes.forEach(function(m,i){var d=document.createElement('details');d.innerHTML='<summary>'+(i+1)+'. '+m.w+'</summary><div class="danger"><b>Why wrong:</b> '+m.why+'</div><div class="ok"><b>Correct:</b> <span class="kbd">'+m.r+'</span></div>';mDiv.appendChild(d)});
 var treeStep=0;
@@ -794,6 +1322,7 @@ function treeRestart(){treeStep=0;renderTree()}
 function renderTree(){
 var q=document.getElementById('treeQ'),o=document.getElementById('treeOpts'),r=document.getElementById('treeRes');r.innerHTML='';
 var steps=[
+{q:'Q0: Is your button INSIDE the table row or OUTSIDE (toolbar/footer)?',opts:['INSIDE row → getSource()+context','OUTSIDE → table selection'],res:['const oCtx = oEvent.getSource().getBindingContext(); // inherits row ctx','const oItem = this.byId("productsTable").getSelectedItem(); // + null-guard!']},
 {q:'Q1: Do you need the control that fired the event?',opts:['YES → getSource()','NO → next'],res:['const oControl = oEvent.getSource(); // the Button/Input/...',null]},
 {q:'Q2: Does the event carry special info (typed text, tick, selected item)?',opts:['YES → getParameter()','NO → next'],res:['oEvent.getParameter("value" | "selected" | "listItem" | "selectedItem") — check event docs',null]},
 {q:'Q3: Do you need the data behind the control?',opts:['YES → getBindingContext()','NO → maybe byId/getModel'],res:['const oCtx = oControl.getBindingContext("nameIfNamed");',null]},
@@ -814,7 +1343,11 @@ var quiz=[
 {q:'What does getPath() return?',opts:['A. Object','B. Control','C. String like /Products/1','D. Boolean'],a:2,ex:'Path string — great for nav/debug/bindElement.'},
 {q:'What does getModel() return?',opts:['A. The Model','B. A row','C. A string','D. An event'],a:0,ex:'Whole data container.'},
 {q:'this.byId("tbl") returns?',opts:['A. Fired control','B. Control with that view ID','C. Context','D. Product'],a:1,ex:'byId = find by ID; getSource = who fired.'},
-{q:'Table uses {products>/Products}. Correct context call?',opts:['A. getBindingContext()','B. getBindingContext("products")','C. getSource("products")','D. getObject("products")'],a:1,ex:'Named binding needs the name.'}];
+{q:'Table uses {products>/Products}. Correct context call?',opts:['A. getBindingContext()','B. getBindingContext("products")','C. getSource("products")','D. getObject("products")'],a:1,ex:'Named binding needs the name.'},
+{q:'View button is in the TOOLBAR (outside table). Correct data access?',opts:['A. oEvent.getSource().getBindingContext().getObject()','B. this.byId("tbl").getSelectedItem().getBindingContext().getObject()','C. oEvent.getParameter("value")','D. oButton.getParent().getObject()'],a:1,ex:'Outside has no context on the button. Ask the TABLE for its selected item.'},
+{q:'Outside button, nothing selected. getSelectedItem() returns?',opts:['A. Empty object {}','B. null → must guard','C. First row automatically','D. The Table'],a:1,ex:'Single-select returns null. Guard: if(!oItem) MessageToast "Select a row".'},
+{q:'MultiSelect table, bulk delete outside. Which API?',opts:['A. getSelectedItems() loop','B. getSource().getObject()','C. getParameter("listItem") on press','D. byId("btn").getObject()'],a:0,ex:'Press has no listItem param. Use table.getSelectedItems() or getSelectedContexts().'},
+{q:'Footer "Total" button (all rows). Which API?',opts:['A. getSelectedItem() only','B. getItems() loop + getProperty("price")','C. getSource().getBindingContext()','D. getParameter("value")'],a:1,ex:'Footer needs ALL visible rows: getItems(), not selection.'}];
 var qd=document.getElementById('quizzes');
 quiz.forEach(function(z,i){var d=document.createElement('div');d.className='quiz';d.innerHTML='<b>Q'+(i+1)+'. '+z.q+'</b>';z.opts.forEach(function(op,oi){var b=document.createElement('button');b.textContent=op;b.onclick=function(){if(oi===z.a){b.style.borderColor='#22c55e';b.textContent+=' ✓'}else{b.style.borderColor='#f87171';b.textContent+=' ✗'}};d.appendChild(b)});var rb=document.createElement('button');rb.className='btn ghost';rb.style.marginTop='8px';rb.textContent='Show answer';var an=document.createElement('div');an.className='ans infoBox';an.innerHTML='<b>Answer: '+z.opts[z.a]+'</b><br>'+z.ex;rb.onclick=function(){an.style.display=an.style.display==='block'?'none':'block'};d.appendChild(rb);d.appendChild(an);qd.appendChild(d)});
 var products=[{id:1,title:'Laptop',price:50000,category:'Electronics'},{id:2,title:'Phone',price:30000,category:'Electronics'},{id:3,title:'Tablet',price:20000,category:'Electronics'}];
@@ -838,6 +1371,42 @@ document.getElementById('dbgInspect').innerHTML='✅ <b>View clicked on row '+(i
 }
 var links=document.querySelectorAll('#sidebar a');
 window.addEventListener('scroll',function(){var cur=null;document.querySelectorAll('main section').forEach(function(s){if(window.scrollY>=s.offsetTop-120)cur=s.id});links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur)})});
+/* ===== OUTSIDE-TABLE LIVE DEMO (§21G) ===== */
+var outsideSel=-1;
+(function(){
+var tbl=document.getElementById('mockTblOutside');if(!tbl)return;
+function render(){
+tbl.innerHTML='<div class="mrow head"><div>Sel</div><div>Title</div><div>Price</div><div>Category</div><div>Ctx path</div></div>';
+products.forEach(function(p,idx){
+var r=document.createElement('div');r.className='mrow';if(idx===outsideSel){r.style.background='#EEF2FF';r.style.boxShadow='inset 3px 0 0 #4F46E5'}
+var sel=document.createElement('div');var radio=document.createElement('input');radio.type='radio';radio.name='outsideSel';radio.checked=(idx===outsideSel);
+radio.onclick=function(){outsideSel=idx;render();document.getElementById('outsideOut').innerHTML='✅ Selected row '+(idx+1)+' → <span class="kbd">/Products/'+idx+'</span> ('+p.title+'). Now press View/Edit/Delete OUTSIDE.';};
+sel.appendChild(radio);r.appendChild(sel);
+[['title'],['price'],['category']].forEach(function(k){var d=document.createElement('div');d.textContent=p[k[0]];r.appendChild(d)});
+var ctx=document.createElement('div');ctx.innerHTML='<span class="kbd">/Products/'+idx+'</span>';r.appendChild(ctx);
+tbl.appendChild(r)});
+}
+render();
+window.outsideRender=render;
+})();
+function outsideSelProduct(){if(outsideSel<0)return null;return{idx:outsideSel,path:'/Products/'+outsideSel,data:products[outsideSel]}}
+function outsideView(){
+var s=outsideSelProduct();
+if(!s){document.getElementById('outsideOut').innerHTML='⚠️ <b>Nothing selected.</b> Real code: <span class="kbd">getSelectedItem() === null → MessageToast "Select a row first"</span>';return}
+document.getElementById('outsideOut').innerHTML='✅ <b>OUTSIDE View — correct:</b><br><span class="kbd">this.byId("productsTable").getSelectedItem()</span> → row '+(s.idx+1)+'<br><span class="kbd">getBindingContext().getObject()</span> → <pre>'+JSON.stringify(s.data,null,2)+'</pre>→ navTo("detail", {productPath: "'+encodeURIComponent(s.path)+'"})';}
+function outsideEdit(){
+var s=outsideSelProduct();
+if(!s){document.getElementById('outsideOut').innerHTML='⚠️ Select a row first → <span class="kbd">getSelectedItem() === null</span>';return}
+document.getElementById('outsideOut').innerHTML='✅ <b>OUTSIDE Edit:</b> selected <span class="kbd">'+s.path+'</span> → <span class="kbd">oDialog.setBindingContext(oItem.getBindingContext())</span> → dialog shows <b>'+s.data.title+'</b>. No manual copying!';}
+function outsideDelete(){
+var s=outsideSelProduct();
+if(!s){document.getElementById('outsideOut').innerHTML='⚠️ Select a row to delete.';return}
+document.getElementById('outsideOut').innerHTML='✅ <b>OUTSIDE Delete:</b> <span class="kbd">sPath = "'+s.path+'"</span> → remove from JSONModel / <span class="kbd">OData remove("'+s.path+'")</span> → <span class="kbd">oTable.removeSelections()</span>';}
+function outsideTotal(){
+var t=products.reduce(function(a,p){return a+p.price},0);
+document.getElementById('outsideOut').innerHTML='✅ <b>Footer Total (ALL rows, not selection):</b><br><span class="kbd">this.byId("tbl").getItems().forEach(i => total += i.getBindingContext().getProperty("price"))</span><br>Total = <b>'+t+'</b>';}
+function outsideBroken(){
+document.getElementById('outsideOut').innerHTML='💥 <b>BROKEN (inside-pattern on outside button):</b><br><span class="kbd">oEvent.getSource()</span> = Toolbar Button (ctx = null)<br><span class="kbd">oEvent.getSource().getBindingContext()</span> → <span class="kbd">null</span><br><span class="kbd">null.getObject()</span> → <b>TypeError: Cannot read properties of null</b> ❌<br>Fix: ask the TABLE → <span class="kbd">this.byId("productsTable").getSelectedItem()</span>';}
 </script>
 </body>
 </html>
