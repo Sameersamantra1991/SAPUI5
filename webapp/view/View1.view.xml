@@ -1,19 +1,23 @@
 <mvc:View controllerName="com.demo.b72ui5app.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
+
     <Page id="page" title="{i18n>title}">
         <content>
+
             <Table id="productsTable" items="{/Products}" growing="true" growingThreshold="10" class="sapUiResponsiveContentPadding">
+
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Products" />
                         <ToolbarSpacer />
+
                         <Button text="Add Product" icon="sap-icon://add" press=".onAddProduct" />
-                        <Button text="View Products" press=".onViewProduct" />
                     </Toolbar>
                 </headerToolbar>
 
                 <columns>
+
                     <Column>
                         <Text text="ID" />
                     </Column>
@@ -30,14 +34,17 @@
                         <Text text="Category" />
                     </Column>
 
+                    <!-- ONE Actions column -->
                     <Column>
                         <Text text="Actions" />
                     </Column>
+
                 </columns>
 
                 <items>
                     <ColumnListItem>
                         <cells>
+
                             <Text text="{id}" />
 
                             <Text text="{title}" />
@@ -46,11 +53,22 @@
 
                             <Text text="{category}" />
 
-                            <Button text="View Products" press=".onViewProduct" />
+                            <!-- Both buttons in ONE cell -->
+                            <HBox>
+
+                                <Button text="View/Edit" press=".onViewProduct" />
+
+                                <Button text="Delete" press=".onDeleteProduct" type="Reject" />
+
+                            </HBox>
+
                         </cells>
                     </ColumnListItem>
                 </items>
+
             </Table>
+
         </content>
     </Page>
+
 </mvc:View>
