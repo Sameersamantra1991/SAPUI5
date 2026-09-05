@@ -7,14 +7,18 @@
     "openui5",
     "sapui5"
   ],
-  "main": "webapp/index.html",
-  "dependencies": {},
-  "devDependencies": {
-    "@ui5/cli": "^4.0.33",
-    "@sap/ux-ui5-tooling": "1",
-    "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
-    "eslint": "^10"
+  "homepage": "https://github.com/Sameersamantra1991/SAPUI5#readme",
+  "bugs": {
+    "url": "https://github.com/Sameersamantra1991/SAPUI5/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sameersamantra1991/SAPUI5.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "webapp/index.html",
   "scripts": {
     "start": "fiori run --open \"test/flp.html#app-preview\"",
     "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
@@ -26,6 +30,12 @@
     "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
     "start-variants-management": "fiori run --open \"/preview.html#app-preview\"",
     "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\""
+  },
+  "devDependencies": {
+    "@ui5/cli": "^4.0.33",
+    "@sap/ux-ui5-tooling": "1",
+    "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
+    "eslint": "^10"
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }

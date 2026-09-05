@@ -1,25 +1,15 @@
-<mvc:View
-    controllerName="com.demo.b72ui5app.controller.View1"
+<mvc:View controllerName="com.demo.b72ui5app.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-
     <Page id="page" title="{i18n>title}">
         <content>
-            <Table
-                id="productsTable"
-                items="{/Products}"
-                growing="true"
-                growingThreshold="10"
-                class="sapUiResponsiveContentPadding">
-
+            <Table id="productsTable" items="{/Products}" growing="true" growingThreshold="10" class="sapUiResponsiveContentPadding">
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Products" />
                         <ToolbarSpacer />
-                        <Button
-                            text="Add Product"
-                            icon="sap-icon://add"
-                            press=".onAddProduct" />
+                        <Button text="Add Product" icon="sap-icon://add" press=".onAddProduct" />
+                        <Button text="View Products" press=".onViewProduct" />
                     </Toolbar>
                 </headerToolbar>
 
@@ -56,15 +46,11 @@
 
                             <Text text="{category}" />
 
-                            <Button
-                                text="View"
-                                press=".onViewProduct" />
+                            <Button text="View Products" press=".onViewProduct" />
                         </cells>
                     </ColumnListItem>
                 </items>
-
             </Table>
         </content>
     </Page>
-
 </mvc:View>
